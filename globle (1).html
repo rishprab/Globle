@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Globle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --panel: #ffffff;
+    --panel2: #f8f6f1;
+    --ink: #1d2433;
+    --muted: #6b7280;
+    --line: #e4dfd3;
+    --accent: #e4572e;
+    --accent-dark: #c2401b;
+    --green: #2f9e58;
+    --blue: #2f6fb0;
+    --purple: #7c3aed;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 14px 16px 40px;
+  }
+  h1, h2, h3, .brand, .big-name { font-family: "Fredoka", -apple-system, sans-serif; }
+  button { font-family: inherit; cursor: pointer; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .help-fab {
+    position: fixed; top: 12px; right: 12px; z-index: 60;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--line); color: var(--accent);
+    font-size: 1.1rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .topbar { display: flex; align-items: center; gap: 10px; margin: 0 52px 12px 0; min-height: 38px; }
+  .brand { font-size: 1.5rem; font-weight: 700; cursor: pointer; user-select: none; }
+  .brand span { color: var(--accent); }
+  .topbar .spacer { flex: 1; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--panel); font-size: 1.05rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+  .btn {
+    display: block; width: 100%; border: none; border-radius: 12px; padding: 13px 14px;
+    font-size: 1rem; font-weight: 700; background: var(--accent); color: #fff;
+    box-shadow: 0 3px 0 var(--accent-dark);
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--accent-dark); }
+  .btn.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 2px 0 var(--line); }
+  .btn.green { background: var(--green); box-shadow: 0 3px 0 #237a43; }
+  .btn.small { padding: 9px 12px; font-size: 0.88rem; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.82rem; }
+
+  /* ---------- LANDING ---------- */
+  .landing { max-width: 520px; margin: 0 auto; }
+  .hero { text-align: center; margin: 4px 0 14px; }
+  #heroGlobe { width: 150px; height: 150px; display: block; margin: 0 auto 4px; }
+  .hero h1 { font-size: 2.3rem; margin: 0; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { margin: 4px 0 0; color: var(--muted); font-size: 0.93rem; line-height: 1.45; }
+  .game-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: #e9e4d8; border-radius: 16px; padding: 5px; }
+  .game-tabs button { border: none; background: transparent; border-radius: 12px; padding: 10px 6px; color: var(--muted); }
+  .game-tabs button b { display: block; font-family: "Fredoka", sans-serif; font-size: 1.08rem; color: inherit; }
+  .game-tabs button span { font-size: 0.74rem; }
+  .game-tabs button.sel { background: var(--panel); color: var(--ink); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  .section-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 16px 0 8px; }
+  .mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mode-card {
+    text-align: left; background: var(--panel); border: 2px solid var(--line); border-radius: 14px;
+    padding: 12px; color: var(--ink); transition: border-color 0.15s;
+  }
+  .mode-card .ico { font-size: 1.5rem; }
+  .mode-card h3 { margin: 4px 0 2px; font-size: 1.08rem; }
+  .mode-card p { margin: 0; font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
+  .mode-card .status { margin-top: 8px; font-size: 0.78rem; font-weight: 700; color: var(--blue); min-height: 1em; }
+  .mode-card.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(228,87,46,0.15); }
+  .seg { display: flex; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; gap: 4px; }
+  .seg button { flex: 1; border: none; background: transparent; border-radius: 9px; padding: 10px 6px; font-weight: 700; font-size: 0.9rem; color: var(--muted); }
+  .seg button.sel { background: var(--panel); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .seg-note { font-size: 0.8rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .heart-pick { display: flex; align-items: center; gap: 4px; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 6px 10px; }
+  .heart-pick button { border: none; background: none; font-size: 1.6rem; padding: 2px 3px; line-height: 1; transition: transform 0.15s; }
+  .heart-pick button.off { filter: grayscale(1); opacity: 0.3; }
+  .heart-pick button:active { transform: scale(1.25); }
+  .heart-pick .lbl { margin-left: auto; font-weight: 700; font-size: 0.88rem; color: var(--muted); }
+  #landingNote { font-size: 0.82rem; color: var(--blue); margin: 10px 0 0; text-align: center; min-height: 1em; }
+
+  /* ---------- GAME LAYOUT ---------- */
+  .game-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .globe-col, .side-col { min-width: 0; }
+  @media (min-width: 860px) {
+    .game-wrap { grid-template-columns: minmax(0, 1.15fr) minmax(320px, 1fr); align-items: start; }
+    .globe-col { position: sticky; top: 14px; }
+  }
+  .mode-line { font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 3px 10px; }
+  .globe-box { position: relative; width: 100%; max-width: 620px; margin: 0 auto; aspect-ratio: 1 / 1; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  #globe, #globeFx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #globe { cursor: grab; transition: filter 1.2s ease; }
+  #globe.dragging { cursor: grabbing; }
+  #globeFx { pointer-events: none; }
+  .globe-box.shake { animation: gshake 0.45s ease; }
+  @keyframes gshake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-9px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(3px); } }
+  .globe-box.gameover #globe { filter: grayscale(1) brightness(0.92); }
+  .zoom-ctl { position: absolute; right: 4px; bottom: 4px; display: flex; flex-direction: column; gap: 6px; }
+  .zoom-ctl button {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.92);
+    font-size: 1.3rem; font-weight: 700; color: var(--ink); box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .globe-tip { position: absolute; left: 4px; bottom: 6px; font-size: 0.72rem; color: var(--muted); background: rgba(255,255,255,0.85); padding: 4px 8px; border-radius: 8px; max-width: 60%; pointer-events: none; }
+  .float-badge {
+    position: absolute; left: 50%; top: 38%; transform: translate(-50%, 0); pointer-events: none; white-space: nowrap;
+    font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2rem; color: var(--green);
+    text-shadow: 0 2px 0 #fff, 0 0 12px rgba(255,255,255,0.9); opacity: 0;
+  }
+  .float-badge.go { animation: floatUp 1.1s ease-out; }
+  @keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 20px) scale(0.6); } 25% { opacity: 1; transform: translate(-50%, 0) scale(1.15); } 100% { opacity: 0; transform: translate(-50%, -60px) scale(1); } }
+  .legend { max-width: 420px; margin: 10px auto 0; }
+  .legend-bar { height: 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+  .legend-labels { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+
+  /* ---------- PICKER (type + dropdown) ---------- */
+  .picker { position: relative; }
+  .guess-row { display: flex; gap: 8px; }
+  .guess-row input {
+    flex: 1; min-width: 0; font-size: 1.05rem; padding: 13px 14px; border-radius: 12px;
+    border: 2px solid var(--line); background: var(--panel); color: var(--ink); outline: none;
+  }
+  .guess-row input:focus { border-color: var(--accent); }
+  .guess-row .btn { width: auto; padding: 0 18px; }
+  .suggest {
+    position: absolute; left: 0; right: 0; z-index: 40; top: calc(100% + 4px);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow-y: auto; overscroll-behavior: contain;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.14); display: none; max-height: 300px;
+  }
+  .suggest.up { top: auto; bottom: calc(100% + 4px); }
+  .suggest.show { display: block; }
+  .suggest button {
+    display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px;
+    text-align: left; background: none; border: none; border-bottom: 1px solid var(--line);
+    padding: 11px 14px; font-size: 0.98rem; color: var(--ink);
+  }
+  .suggest button:last-child { border-bottom: none; }
+  .suggest button.hl { background: #fff1ec; }
+  .suggest .alias { font-size: 0.75rem; color: var(--muted); }
+  .suggest .done { font-size: 0.72rem; color: var(--muted); font-weight: 700; }
+  .suggest .head { position: sticky; top: 0; background: var(--panel2); font-size: 0.72rem; font-weight: 700; color: var(--muted); padding: 6px 14px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); }
+  .toast {
+    position: fixed; left: 50%; top: 14px; transform: translate(-50%, -8px);
+    background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 20px; font-weight: 700; font-size: 0.88rem;
+    white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 150; box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    max-width: 92vw; overflow: hidden; text-overflow: ellipsis;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- HOT & COLD PANEL ---------- */
+  .hints h3, .list-card h3 { margin: 0 0 10px; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .hint { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+  .hint:first-of-type { border-top: none; }
+  .hint .ico { font-size: 1.3rem; width: 28px; text-align: center; }
+  .hint .body { flex: 1; font-size: 0.9rem; line-height: 1.35; }
+  .hint .body b.t { display: block; font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .hint .lock { color: var(--muted); font-size: 0.85rem; }
+  .hint .reveal-btn { border: 1px solid var(--accent); background: #fff1ec; color: var(--accent-dark); border-radius: 10px; padding: 7px 12px; font-weight: 700; font-size: 0.85rem; }
+  .hint .val { font-weight: 700; font-size: 1rem; }
+  .closest-pill { font-size: 0.8rem; font-family: -apple-system, sans-serif; color: var(--muted); font-weight: 600; }
+  .glist { display: flex; flex-direction: column; gap: 6px; }
+  .grow {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--panel2);
+    border: 1px solid transparent; cursor: pointer; text-align: left; width: 100%; color: var(--ink); font-size: 0.95rem;
+  }
+  .grow.latest { border-color: var(--accent); animation: rowIn 0.45s ease; }
+  @keyframes rowIn { from { transform: scale(0.96); opacity: 0.3; } to { transform: scale(1); opacity: 1; } }
+  .grow .sw { width: 22px; height: 22px; border-radius: 6px; flex: 0 0 auto; border: 1px solid rgba(0,0,0,0.15); }
+  .grow .nm { flex: 1; font-weight: 600; }
+  .grow .km { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.88rem; }
+  .grow .rank { width: 22px; font-size: 0.75rem; color: var(--muted); text-align: right; }
+  .empty { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 8px 0; }
+  .status-card { text-align: center; border-width: 2px; }
+  .status-card.won { border-color: var(--green); background: #f0faf3; }
+  .status-card.lost { border-color: var(--blue); background: #eef5fc; }
+  .status-card .big-name { font-size: 1.5rem; font-weight: 700; margin: 2px 0; }
+
+  /* ---------- NAME-IT HUD ---------- */
+  .quiz-hud { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; margin-bottom: 8px; }
+  .hearts { display: flex; gap: 2px; flex-wrap: wrap; }
+  .heart { position: relative; width: 28px; height: 28px; display: inline-block; font-size: 22px; line-height: 28px; }
+  .heart .h { position: absolute; inset: 0; text-align: center; }
+  .heart .l { clip-path: inset(0 50% 0 0); }
+  .heart .r { clip-path: inset(0 0 0 50%); }
+  .heart.lost .h { filter: grayscale(1); opacity: 0.22; }
+  .heart.breaking .l { animation: breakL 0.95s ease-in forwards; }
+  .heart.breaking .r { animation: breakR 0.95s ease-in forwards; }
+  @keyframes breakL { 0% { transform: none; } 25% { transform: scale(1.35); } 40% { transform: translate(-2px,0) rotate(-14deg) scale(1.25); } 100% { transform: translate(-16px, 30px) rotate(-60deg); opacity: 0; } }
+  @keyframes breakR { 0% { transform: none; } 25% { transform: scale(1.35); } 40% { transform: translate(2px,0) rotate(14deg) scale(1.25); } 100% { transform: translate(16px, 30px) rotate(60deg); opacity: 0; } }
+  .hud-right { text-align: right; min-width: 110px; }
+  .hud-count { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 1.15rem; display: inline-block; }
+  .hud-count.bump { animation: bump 0.5s ease; }
+  @keyframes bump { 40% { transform: scale(1.35); color: var(--green); } }
+  .progress { height: 8px; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-top: 4px; }
+  .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #4ade80, var(--green)); transition: width 0.6s cubic-bezier(.2,1.2,.4,1); }
+  .streak { font-size: 0.75rem; font-weight: 700; color: var(--accent); min-height: 1em; }
+
+  .quiz-card h3 { margin: 0 0 10px; font-size: 1.1rem; }
+  .qresult { text-align: center; border-width: 2px; animation: popIn 0.35s cubic-bezier(.2,1.4,.4,1); }
+  .qresult.ok { border-color: var(--green); background: #f0faf3; }
+  .qresult.no { border-color: #dc2626; background: #fef2f2; }
+  .qresult .big-name { font-size: 1.6rem; margin: 2px 0 10px; }
+
+  /* ---------- GAME SHOW STAGE ---------- */
+  .stage {
+    position: relative; overflow: hidden; border-radius: 18px; padding: 16px 14px; margin-bottom: 12px; color: #fff;
+    background: radial-gradient(ellipse at 50% -20%, #2c46a0 0%, #0e1738 58%, #070b1d 100%);
+    box-shadow: inset 0 0 0 2px rgba(231,198,107,0.55), 0 10px 28px rgba(13,21,51,0.35);
+  }
+  .stage .beam { position: absolute; top: -40%; width: 46%; height: 170%; pointer-events: none; transform-origin: 50% 0;
+    background: linear-gradient(180deg, rgba(255,240,200,0.22), rgba(255,240,200,0) 75%);
+    clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%); }
+  .stage .beam.b1 { left: 2%; animation: sway1 5s ease-in-out infinite alternate; }
+  .stage .beam.b2 { right: 2%; animation: sway2 6s ease-in-out infinite alternate; }
+  .stage.suspense .beam.b1 { animation-duration: 0.7s; }
+  .stage.suspense .beam.b2 { animation-duration: 0.55s; }
+  @keyframes sway1 { from { transform: rotate(-22deg); } to { transform: rotate(14deg); } }
+  @keyframes sway2 { from { transform: rotate(20deg); } to { transform: rotate(-16deg); } }
+  .stage > *:not(.beam) { position: relative; }
+  .q-title { text-align: center; font-family: "Fredoka", sans-serif; font-size: 1.12rem; color: #ffd56b; margin: 0 0 4px; letter-spacing: 0.02em; }
+  .q-sub { text-align: center; font-size: 0.78rem; color: #b7c3ef; margin: 0 0 12px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .opt { position: relative; border: none; padding: 2px; background: linear-gradient(#efd27a, #a8832f);
+    clip-path: polygon(7% 0, 93% 0, 100% 50%, 93% 100%, 7% 100%, 0 50%); transition: opacity 0.35s, transform 0.15s; }
+  .opt:active { transform: scale(0.97); }
+  .opt .in { display: flex; align-items: center; gap: 6px; min-height: 54px; padding: 6px 14px 6px 16px; color: #fff;
+    background: linear-gradient(180deg, #213275, #0f1a45); clip-path: polygon(7% 0, 93% 0, 100% 50%, 93% 100%, 7% 100%, 0 50%);
+    font-weight: 700; font-size: 0.9rem; text-align: left; line-height: 1.15; }
+  .opt .k { color: #ffd56b; font-weight: 800; }
+  .opt.sel .in { background: linear-gradient(180deg, #fbbf24, #d97706); color: #231300; }
+  .opt.sel .k { color: #231300; }
+  .opt.locked .in { background: linear-gradient(180deg, #fbbf24, #d97706); color: #231300; animation: locked 0.45s ease-in-out infinite alternate; }
+  .opt.locked .k { color: #231300; }
+  @keyframes locked { from { filter: brightness(1); } to { filter: brightness(1.35); } }
+  .opt.dim { opacity: 0.3; }
+  .opt.right { opacity: 1; }
+  .opt.right .in { background: linear-gradient(180deg, #34d399, #15803d); color: #fff; animation: rightFlash 0.22s 6 alternate; }
+  .opt.right .k { color: #fff; }
+  @keyframes rightFlash { from { filter: brightness(1); } to { filter: brightness(1.6); } }
+  .opt.wrong { animation: shakeX 0.5s ease; }
+  .opt.wrong .in { background: linear-gradient(180deg, #f87171, #b91c1c); color: #fff; }
+  .opt.wrong .k { color: #fff; }
+  @keyframes shakeX { 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+  .stage-msg { text-align: center; min-height: 24px; margin-top: 12px; font-weight: 700; color: #d6deff; font-size: 0.95rem; }
+  .stage-msg .dots::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .confirm { display: none; gap: 8px; margin-top: 10px; }
+  .confirm.show { display: flex; animation: popIn 0.3s ease; }
+  .confirm button { flex: 1; border-radius: 12px; padding: 11px; font-weight: 800; font-size: 0.92rem; border: none; }
+  .confirm .final { background: linear-gradient(180deg, #ffd56b, #e0a92c); color: #231300; box-shadow: 0 3px 0 #9a6f12; }
+  .confirm .think { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+  .drum { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; margin-top: 10px; display: none; }
+  .drum.show { display: block; }
+  .drum i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffd56b, #f59e0b); }
+  .stamp { position: absolute !important; left: 50%; top: 46%; transform: translate(-50%, -50%) rotate(-8deg) scale(0); opacity: 0; pointer-events: none;
+    font-family: "Fredoka", sans-serif; font-size: 2.3rem; font-weight: 700; padding: 2px 18px; border: 4px solid; border-radius: 14px; background: rgba(7,11,29,0.7); z-index: 3; white-space: nowrap; }
+  .stamp.ok { color: #4ade80; border-color: #4ade80; }
+  .stamp.no { color: #f87171; border-color: #f87171; }
+  .stamp.show { animation: stampIn 1.5s cubic-bezier(.2,1.6,.4,1) forwards; }
+  @keyframes stampIn { 0% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(2.2); } 18% { opacity: 1; transform: translate(-50%,-50%) rotate(-8deg) scale(1); } 75% { opacity: 1; transform: translate(-50%,-50%) rotate(-8deg) scale(1); } 100% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(0.9); } }
+  .stage .next { display: none; margin-top: 12px; width: 100%; border: none; border-radius: 12px; padding: 12px; font-weight: 800; font-size: 0.98rem; background: linear-gradient(180deg, #ffd56b, #e0a92c); color: #231300; box-shadow: 0 3px 0 #9a6f12; }
+  .stage .next.show { display: block; animation: popIn 0.3s ease; }
+  @media (max-width: 340px) { .opts { grid-template-columns: 1fr; } }
+
+  /* ---------- MODALS ---------- */
+  .modal-back { position: fixed; inset: 0; background: rgba(29,36,51,0.45); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-back.show { display: flex; }
+  .modal { background: var(--panel); border-radius: 18px; padding: 18px; width: 100%; max-width: 400px; max-height: 92vh; overflow: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.25); animation: popIn 0.35s cubic-bezier(.2,1.4,.4,1); }
+  .modal.quake { animation: popIn 0.35s cubic-bezier(.2,1.4,.4,1), shakeX 0.5s 0.35s ease; }
+  @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal h2 { margin: 0 0 4px; font-size: 1.4rem; text-align: center; }
+  .modal .sub { text-align: center; color: var(--muted); font-size: 0.9rem; margin: 0 0 12px; }
+  #magCanvas { width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; display: block; margin-bottom: 12px; background: #dbeaf5; }
+  .big-name { font-size: 2rem; font-weight: 700; text-align: center; line-height: 1.1; }
+  .win-burst { text-align: center; font-size: 3rem; animation: bounceY 1.2s ease-in-out infinite; }
+  @keyframes bounceY { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-8px) rotate(6deg); } }
+  .broken { text-align: center; font-size: 3.4rem; animation: dropIn 0.9s cubic-bezier(.3,1.5,.5,1); }
+  @keyframes dropIn { 0% { transform: translateY(-80px) rotate(-30deg); opacity: 0; } 60% { transform: translateY(6px) rotate(8deg); opacity: 1; } 100% { transform: none; } }
+  .stars { text-align: center; font-size: 2.2rem; letter-spacing: 6px; margin: 4px 0; }
+  .stars span { display: inline-block; opacity: 0; transform: scale(0); }
+  .stars span.on { animation: starIn 0.5s cubic-bezier(.2,1.8,.4,1) forwards; }
+  .stars span.off { animation: starOff 0.5s ease forwards; filter: grayscale(1); }
+  @keyframes starIn { to { opacity: 1; transform: scale(1); } }
+  @keyframes starOff { to { opacity: 0.25; transform: scale(1); } }
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0; text-align: center; }
+  .stat-row .n { font-family: "Fredoka", sans-serif; font-size: 1.5rem; font-weight: 700; }
+  .stat-row .l { font-size: 0.7rem; color: var(--muted); line-height: 1.2; }
+  .tabs { display: flex; gap: 4px; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 10px; }
+  .tabs button { flex: 1; border: none; background: transparent; border-radius: 9px; padding: 8px 4px; font-weight: 700; color: var(--muted); font-size: 0.85rem; }
+  .tabs button.sel { background: var(--panel); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 0.8rem; }
+  .dist-row .lb { width: 46px; color: var(--muted); font-weight: 600; text-align: right; }
+  .dist-row .bar { height: 20px; background: var(--accent); color: #fff; border-radius: 5px; font-weight: 700; display: flex; align-items: center; justify-content: flex-end; padding: 0 6px; min-width: 22px; }
+  .dist-row .bar.zero { background: var(--line); color: var(--muted); }
+  .countdown { font-family: "Fredoka", sans-serif; font-size: 1.4rem; font-weight: 700; text-align: center; }
+
+  #fxCanvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 200; }
+  #hurt { position: fixed; inset: 0; pointer-events: none; z-index: 120; opacity: 0;
+    background: radial-gradient(ellipse at center, rgba(220,38,38,0) 45%, rgba(220,38,38,0.55) 100%); }
+  #hurt.go { animation: hurt 0.75s ease-out; }
+  @keyframes hurt { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<a class="help-fab" href="globle-help.html" target="_blank" rel="noopener" aria-label="How to play">?</a>
+<div class="toast" id="toast"></div>
+<div id="hurt"></div>
+
+<!-- LANDING -->
+<div id="screen-landing" class="screen active">
+  <div class="landing">
+    <div class="hero">
+      <canvas id="heroGlobe"></canvas>
+      <h1>Glob<span>le</span></h1>
+      <p>How well do you know the world?</p>
+    </div>
+
+    <div class="game-tabs">
+      <button id="tabHot" onclick="setGame('hot')"><b>🔥 Hot &amp; Cold</b><span>Find the mystery country</span></button>
+      <button id="tabName" onclick="setGame('name')"><b>📍 Name it</b><span>Identify the highlighted country</span></button>
+    </div>
+
+    <!-- Hot & Cold settings -->
+    <div id="setHot">
+      <div class="section-label">Game mode</div>
+      <div class="mode-cards">
+        <button class="mode-card" id="modeDaily" onclick="setMode('daily')">
+          <div class="ico">📅</div><h3>Daily</h3>
+          <p>One country per day. The same one for everyone.</p>
+          <div class="status" id="dailyStatus"></div>
+        </button>
+        <button class="mode-card" id="modeUnlimited" onclick="setMode('unlimited')">
+          <div class="ico">♾️</div><h3>Unlimited</h3>
+          <p>A new random country every round.</p>
+          <div class="status" id="unlimitedStatus"></div>
+        </button>
+      </div>
+      <div class="section-label">Hints</div>
+      <div class="seg">
+        <button id="hintsOff" onclick="setHints(false)">🚫 No hints</button>
+        <button id="hintsOn" onclick="setHints(true)">💡 With hints</button>
+      </div>
+      <div class="seg-note" id="hintsNote"></div>
+    </div>
+
+    <!-- Name it settings -->
+    <div id="setName" style="display:none">
+      <div class="section-label">Answer style</div>
+      <div class="mode-cards">
+        <button class="mode-card" id="styleType" onclick="setQ('qStyle','type')">
+          <div class="ico">⌨️</div><h3>Type it</h3>
+          <p>Type the name or pick it from the list.</p>
+        </button>
+        <button class="mode-card" id="styleShow" onclick="setQ('qStyle','show')">
+          <div class="ico">🎤</div><h3>Game show</h3>
+          <p>Four choices. Final answer? Then the big reveal…</p>
+        </button>
+      </div>
+      <div class="section-label">Countries to find</div>
+      <div class="seg" id="goalSeg"></div>
+      <div class="section-label">Lives</div>
+      <div class="heart-pick" id="lifePick"></div>
+      <div class="seg-note">Every wrong answer costs a heart. Find all your countries before your hearts run out!</div>
+    </div>
+
+    <div style="margin-top:18px">
+      <button class="btn" id="playBtn" onclick="play()">Play</button>
+      <p id="landingNote"></p>
+      <button class="btn secondary small" style="margin-top:6px" onclick="openStats()">📊 Your stats</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME (shared by both games) -->
+<div id="screen-game" class="screen">
+  <div class="topbar">
+    <div class="brand" onclick="goHome()">🌍 Glob<span>le</span></div>
+    <div class="spacer"></div>
+    <button class="icon-btn" onclick="openStats()" aria-label="Stats">📊</button>
+  </div>
+
+  <div class="game-wrap">
+    <div class="globe-col">
+      <div class="mode-line" id="modeLine"></div>
+      <div class="quiz-hud" id="quizHud" style="display:none">
+        <div>
+          <div class="hearts" id="hearts"></div>
+          <div class="streak" id="streak"></div>
+        </div>
+        <div class="hud-right">
+          <div><span class="hud-count" id="hudCount">0 / 10</span> <span class="small muted">found</span></div>
+          <div class="progress"><i id="hudBar"></i></div>
+        </div>
+      </div>
+      <div class="globe-box" id="globeBox">
+        <canvas id="globe"></canvas>
+        <canvas id="globeFx"></canvas>
+        <div class="float-badge" id="floatBadge">+1</div>
+        <div class="zoom-ctl">
+          <button onclick="zoomBy(1.6)" aria-label="Zoom in">+</button>
+          <button onclick="zoomBy(1/1.6)" aria-label="Zoom out">−</button>
+        </div>
+        <div class="globe-tip" id="globeTip"></div>
+      </div>
+      <div class="legend" id="legend">
+        <div class="legend-bar" id="legendBar"></div>
+        <div class="legend-labels"><span>🧊 Far away</span><span>Bordering 🔥</span></div>
+      </div>
+    </div>
+
+    <!-- HOT & COLD SIDE -->
+    <div class="side-col" id="sideHot">
+      <div class="card picker" id="guessCard">
+        <div class="guess-row">
+          <input id="guessInput" type="text" placeholder="Type or pick a country…" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+          <button class="btn" onclick="hotPicker.enter()">Guess</button>
+        </div>
+        <div class="suggest" id="guessSuggest"></div>
+      </div>
+      <div class="card status-card" id="statusCard" style="display:none"></div>
+      <div class="card hints" id="hintsCard" style="display:none"></div>
+      <div class="card list-card">
+        <h3><span>Guesses <span class="muted" id="gCount"></span></span><span class="closest-pill" id="closestPill"></span></h3>
+        <div class="glist" id="guessList"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn secondary small" id="giveUpBtn" onclick="openModal('giveUpModal')">🏳️ Give up</button>
+        <button class="btn secondary small" onclick="goHome()">🏠 Menu</button>
+      </div>
+    </div>
+
+    <!-- NAME IT SIDE -->
+    <div class="side-col" id="sideName" style="display:none">
+      <div class="card quiz-card picker" id="typeCard">
+        <h3>Which country is highlighted? <span style="color:var(--purple)">■</span></h3>
+        <div class="guess-row">
+          <input id="quizInput" type="text" placeholder="Type or pick a country…" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+          <button class="btn" onclick="quizPicker.enter()">Answer</button>
+        </div>
+        <div class="suggest" id="quizSuggest"></div>
+        <button class="btn secondary small" style="margin-top:10px" onclick="passQuestion()">🤷 No idea (costs a heart)</button>
+      </div>
+      <div class="card qresult" id="typeResult" style="display:none"></div>
+
+      <div class="stage" id="stage" style="display:none">
+        <div class="beam b1"></div><div class="beam b2"></div>
+        <p class="q-title" id="qTitle">Question 1</p>
+        <p class="q-sub">Which country is highlighted on the globe?</p>
+        <div class="opts" id="opts"></div>
+        <div class="confirm" id="confirmBar">
+          <button class="think" onclick="showCancel()">Let me think</button>
+          <button class="final" onclick="showLockIn()">🔒 Final answer!</button>
+        </div>
+        <div class="stage-msg" id="stageMsg"></div>
+        <div class="drum" id="drum"><i id="drumBar"></i></div>
+        <button class="next" id="stageNext" onclick="nextQuestion()">Next question ▶</button>
+        <div class="stamp" id="stamp"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn secondary small" onclick="goHome()">🏠 Quit to menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAGNIFIER -->
+<div class="modal-back" id="magModal" onclick="if(event.target===this) closeModal('magModal')">
+  <div class="modal">
+    <canvas id="magCanvas"></canvas>
+    <h2 id="magName">-</h2>
+    <p class="sub" id="magSub"></p>
+    <div class="btn-row">
+      <button class="btn secondary" onclick="closeModal('magModal')">Close</button>
+      <button class="btn" id="magGuessBtn">Guess</button>
+    </div>
+  </div>
+</div>
+
+<!-- END OF ROUND -->
+<div class="modal-back" id="endModal" onclick="if(event.target===this) closeModal('endModal')">
+  <div class="modal" id="endBody"></div>
+</div>
+
+<!-- STATS -->
+<div class="modal-back" id="statsModal" onclick="if(event.target===this) closeModal('statsModal')">
+  <div class="modal">
+    <h2>📊 Your stats</h2>
+    <p class="sub">Saved on this device</p>
+    <div class="tabs">
+      <button id="tab-daily" onclick="renderStats('daily')">📅 Daily</button>
+      <button id="tab-unlimited" onclick="renderStats('unlimited')">♾️ Unlimited</button>
+      <button id="tab-name" onclick="renderStats('name')">📍 Name it</button>
+    </div>
+    <div id="statsBody"></div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn secondary small" onclick="resetStats()">Reset</button>
+      <button class="btn small" onclick="closeModal('statsModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- GIVE UP -->
+<div class="modal-back" id="giveUpModal" onclick="if(event.target===this) closeModal('giveUpModal')">
+  <div class="modal">
+    <h2>🏳️ Give up?</h2>
+    <p class="sub">The mystery country will be revealed. This counts as a loss and resets your streak.</p>
+    <div class="btn-row">
+      <button class="btn secondary" onclick="closeModal('giveUpModal')">Keep going</button>
+      <button class="btn" onclick="closeModal('giveUpModal'); finish(false)">Reveal it</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="fxCanvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script src="globle-data.js"></script>
+<script>
+// =====================================================================
+// DATA
+// =====================================================================
+const DATA = window.GLOBLE_DATA;
+const C = DATA.countries;
+const N = C.length;
+const idxOf = {};
+C.forEach((c, i) => idxOf[c.iso] = i);
+const $ = id => document.getElementById(id);
+
+// Three copies of the map: a light one while the globe moves, a medium one when it's still and zoomed out,
+// and full detail once you zoom in.
+function prepFeatures(topo, useExtra) {
+  const feats = topojson.feature(topo, topo.objects[Object.keys(topo.objects)[0]]).features;
+  if (useExtra) feats.forEach(f => { if (DATA.extra[f.properties.iso]) f.geometry = DATA.extra[f.properties.iso]; });
+  const out = feats.filter(f => f.geometry);
+  out.forEach(f => {
+    const g = f.geometry;
+    const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+    // d3 draws on a sphere: a ring wound the wrong way means "everything except this shape", so flip those.
+    polys.forEach(p => { if (d3.geoArea({ type: "Polygon", coordinates: p }) > 2 * Math.PI) p.forEach(r => r.reverse()); });
+    f.key = f.properties.kind === "c" ? f.properties.iso : "o:" + f.properties.name;
+    f.isC = f.properties.kind === "c";
+    // bounding cap (centre + angular radius) so shapes on the far side can be skipped quickly
+    f.cen = d3.geoCentroid(f);
+    let r = 0;
+    polys.forEach(p => p[0].forEach(pt => { const d = d3.geoDistance(f.cen, pt); if (d > r) r = d; }));
+    f.rad = r;
+  });
+  return out;
+}
+const FEAT_HI = prepFeatures(DATA.topo, true);
+const FEAT_MID = prepFeatures(DATA.topoMid, false);
+const FEAT_LO = prepFeatures(DATA.topoLo, false);
+const featByIso = {};
+FEAT_HI.forEach(f => { if (f.isC) featByIso[f.properties.iso] = f; });
+
+// largest single polygon per country, for camera framing and the magnifier
+const mainPoly = {};
+for (const iso in featByIso) {
+  const g = featByIso[iso].geometry;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+  let best = null, ba = -1;
+  polys.forEach(p => { const a = d3.geoArea({ type: "Polygon", coordinates: p }); if (a > ba) { ba = a; best = p; } });
+  mainPoly[iso] = { type: "Feature", geometry: { type: "Polygon", coordinates: best } };
+}
+
+function distKm(isoA, isoB) {
+  let a = idxOf[isoA], b = idxOf[isoB];
+  if (a === b) return 0;
+  if (a > b) [a, b] = [b, a];
+  return DATA.dist[a * N - a * (a + 1) / 2 + (b - a - 1)];
+}
+const nameOf = iso => C[idxOf[iso]].name;
+const fmtKm = d => d === 0 ? "Bordering" : d.toLocaleString("en-AU") + " km";
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+// =====================================================================
+// COLOURS
+// =====================================================================
+const HEAT_STOPS = [
+  [0, "#7a0019"], [400, "#b2182b"], [1000, "#d6452a"], [2000, "#ef7b3c"],
+  [3500, "#f9a95a"], [6000, "#fcca6e"], [10000, "#fde49a"], [15000, "#fef3c4"]
+];
+const heatCache = new Map();
+function heat(d) {
+  if (heatCache.has(d)) return heatCache.get(d);
+  let col = HEAT_STOPS[HEAT_STOPS.length - 1][1];
+  if (d <= 0) col = HEAT_STOPS[0][1];
+  else for (let i = 1; i < HEAT_STOPS.length; i++) {
+    if (d <= HEAT_STOPS[i][0]) { const [d0, c0] = HEAT_STOPS[i - 1], [d1, c1] = HEAT_STOPS[i]; col = d3.interpolateLab(c0, c1)((d - d0) / (d1 - d0)); break; }
+  }
+  heatCache.set(d, col);
+  return col;
+}
+const GREEN = "#2f9e58", LAND = "#c9cdd3", LAND_OTHER = "#dde0e4", TARGET = "#7c3aed";
+const QUIZ_OK = "#86d19f", QUIZ_BAD = "#f3a49c";
+$("legendBar").style.background = "linear-gradient(90deg," + [15000, 10000, 6000, 3500, 2000, 1000, 400, 0].map(heat).join(",") + ")";
+
+// =====================================================================
+// SEARCH + PICKER (typing box with a filterable dropdown of every country)
+// =====================================================================
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+  .replace(/&/g, "and").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+const SEARCH = C.map(c => [{ k: norm(c.name), label: c.name, isName: true }].concat(c.alias.map(a => ({ k: norm(a), label: a, isName: false }))));
+const ALPHA = C.map((c, i) => i).sort((a, b) => C[a].name.localeCompare(C[b].name));
+
+function suggest(q, limit = 8) {
+  const n = norm(q);
+  if (!n) return [];
+  const res = [];
+  C.forEach((c, i) => {
+    let best = null;
+    SEARCH[i].forEach(s => {
+      let score = s.k === n ? 0 : s.k.startsWith(n) ? 1 : (" " + s.k).includes(" " + n) ? 2 : (n.length >= 3 && s.k.includes(n)) ? 3 : -1;
+      if (score < 0) return;
+      if (!s.isName) score += 0.5;
+      if (!best || score < best.score) best = { score, alias: s.isName ? null : s.label };
+    });
+    if (best) res.push({ i, score: best.score, alias: best.alias });
+  });
+  res.sort((a, b) => a.score - b.score || C[a.i].name.localeCompare(C[b.i].name));
+  return res.slice(0, limit);
+}
+
+function makePicker(input, box, opts) {
+  let items = [], hl = -1, open = false;
+  const wrap = input.closest(".picker");
+  function build() {
+    items = norm(input.value) ? suggest(input.value) : ALPHA.map(i => ({ i, alias: null }));
+    if (hl >= items.length) hl = -1;
+  }
+  function place() {
+    const vvH = window.visualViewport ? window.visualViewport.height + window.visualViewport.offsetTop : window.innerHeight;
+    const r = input.getBoundingClientRect();
+    const below = vvH - r.bottom - 12, above = r.top - 12;
+    const up = below < 230 && above > below;
+    box.classList.toggle("up", up);
+    box.style.maxHeight = Math.max(150, Math.min(300, up ? above : below)) + "px";
+  }
+  function paint() {
+    if (!open || !items.length) { box.classList.remove("show"); return; }
+    const head = norm(input.value) ? "" : `<div class="head">All 195 countries · or start typing</div>`;
+    box.innerHTML = head + items.map((s, k) => {
+      const c = C[s.i], tag = opts.tag ? opts.tag(c.iso) : "";
+      return `<button data-k="${k}" class="${k === hl ? "hl" : ""}"><span>${esc(c.name)}${s.alias ? ` <span class="alias">(${esc(s.alias)})</span>` : ""}</span>${tag ? `<span class="done">${tag}</span>` : ""}</button>`;
+    }).join("");
+    place();
+    box.classList.add("show");
+    if (hl >= 0) { const el = box.querySelector(`[data-k="${hl}"]`); if (el) el.scrollIntoView({ block: "nearest" }); }
+  }
+  function show() { open = true; build(); paint(); }
+  function close() { open = false; box.classList.remove("show"); hl = -1; }
+  function finishPick(iso) {
+    input.value = ""; close();
+    if (opts.blurOnPick) input.blur();
+    opts.onPick(iso);
+  }
+  function enter() {
+    if (hl >= 0 && items[hl]) return finishPick(C[items[hl].i].iso);
+    if (!norm(input.value)) return;
+    const s = suggest(input.value)[0];
+    if (!s) { toast("🤔 Not a country I know. Check the spelling"); return; }
+    finishPick(C[s.i].iso);
+  }
+  input.addEventListener("focus", () => { hl = -1; show(); });
+  input.addEventListener("input", () => { hl = -1; show(); });
+  input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { if (!open) show(); if (items.length) hl = (hl + 1) % items.length; paint(); e.preventDefault(); }
+    else if (e.key === "ArrowUp" && items.length) { hl = (hl - 1 + items.length) % items.length; paint(); e.preventDefault(); }
+    else if (e.key === "Enter") { e.preventDefault(); enter(); }
+    else if (e.key === "Escape") close();
+  });
+  box.addEventListener("pointerdown", e => e.preventDefault()); // keep focus in the input while tapping the list
+  box.addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (b && items[+b.dataset.k]) finishPick(C[items[+b.dataset.k].i].iso); });
+  document.addEventListener("pointerdown", e => { if (open && !wrap.contains(e.target)) close(); });
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", () => { if (open) place(); });
+  return { enter, close };
+}
+
+// =====================================================================
+// STORAGE + DATES
+// =====================================================================
+function load(key) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+function localDateStr(d = new Date()) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function dayNumber(str) { const [y, m, d] = str.split("-").map(Number); return Math.round(Date.UTC(y, m - 1, d) / 86400000); }
+function prettyDate(str) { const [y, m, d] = str.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }); }
+function yesterdayOf(str) { const [y, m, d] = str.split("-").map(Number); return localDateStr(new Date(y, m - 1, d - 1)); }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// Every country appears once per 195-day cycle, in a shuffled order that's the same on every device.
+function dailyAnswer(dateStr) {
+  const day = dayNumber(dateStr) - dayNumber("2026-01-01");
+  const cycle = Math.floor(day / N), pos = ((day % N) + N) % N;
+  const order = C.map(c => c.iso).sort();
+  const r = mulberry32(91357 + cycle * 7919);
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  return order[pos];
+}
+
+// =====================================================================
+// LANDING
+// =====================================================================
+let pref = Object.assign({ game: "hot", mode: "daily", hints: false, qStyle: "type", qGoal: 10, qLives: 3 }, load("globle.prefs") || {});
+let activeMode = null;   // "hot" | "name"
+let game = null;         // Hot & Cold state
+let quiz = null;         // Name-it state
+const GOALS = [5, 10, 20, 30, 50];
+
+function savePref() { store("globle.prefs", pref); }
+function setGame(g) { pref.game = g; savePref(); renderLanding(); }
+function setMode(m) { pref.mode = m; savePref(); renderLanding(); }
+function setHints(h) { pref.hints = h; savePref(); renderLanding(); }
+function setQ(k, v) { pref[k] = v; savePref(); renderLanding(); }
+
+function inProgressFor(mode) { return mode === "daily" ? load("globle.daily." + localDateStr()) : load("globle.unlimited"); }
+
+function renderLanding() {
+  const hot = pref.game === "hot";
+  $("tabHot").classList.toggle("sel", hot);
+  $("tabName").classList.toggle("sel", !hot);
+  $("setHot").style.display = hot ? "block" : "none";
+  $("setName").style.display = hot ? "none" : "block";
+  let label = "Play", note = "";
+
+  if (hot) {
+    $("modeDaily").classList.toggle("sel", pref.mode === "daily");
+    $("modeUnlimited").classList.toggle("sel", pref.mode === "unlimited");
+    $("hintsOff").classList.toggle("sel", !pref.hints);
+    $("hintsOn").classList.toggle("sel", pref.hints);
+    $("hintsNote").textContent = pref.hints
+      ? "Unlock up to 3 hints as you go: continent, compass direction and first letter."
+      : "Pure mode: just you, the globe and the colours.";
+    const d = inProgressFor("daily");
+    $("dailyStatus").textContent = !d ? "Not played yet today"
+      : d.won ? `✅ Solved in ${d.guesses.length}` : d.gaveUp ? "🏳️ Revealed" : `⏳ ${d.guesses.length} guess${d.guesses.length === 1 ? "" : "es"} so far`;
+    const u = inProgressFor("unlimited");
+    $("unlimitedStatus").textContent = u && !u.done && u.guesses.length ? `⏳ Round in progress (${u.guesses.length})` : "";
+    const g = inProgressFor(pref.mode);
+    if (pref.mode === "daily" && g) {
+      if (g.done) label = "See today's result";
+      else if (g.guesses.length) label = "Resume today's game";
+      if (!g.done && g.guesses.length && g.hints !== pref.hints) note = `Today's game was started ${g.hints ? "with" : "without"} hints, so it stays that way.`;
+    } else if (pref.mode === "unlimited" && g && !g.done && g.guesses.length) {
+      label = "Resume round";
+      if (g.hints !== pref.hints) note = `This round was started ${g.hints ? "with" : "without"} hints, so it stays that way.`;
+    }
+  } else {
+    $("styleType").classList.toggle("sel", pref.qStyle === "type");
+    $("styleShow").classList.toggle("sel", pref.qStyle === "show");
+    $("goalSeg").innerHTML = GOALS.map(g => `<button class="${pref.qGoal === g ? "sel" : ""}" onclick="setQ('qGoal',${g})">${g}</button>`).join("");
+    $("lifePick").innerHTML = [1, 2, 3, 4, 5].map(n => `<button class="${n <= pref.qLives ? "" : "off"}" onclick="setQ('qLives',${n})" aria-label="${n} lives">❤️</button>`).join("") +
+      `<span class="lbl">${pref.qLives} ${pref.qLives === 1 ? "life" : "lives"}</span>`;
+    label = pref.qStyle === "show" ? "🎤 Start the show" : "Start";
+  }
+  $("playBtn").textContent = label;
+  $("landingNote").textContent = note;
+}
+
+function play() {
+  stopHero();
+  if (pref.game === "name") return startQuiz();
+  let g = inProgressFor(pref.mode);
+  if (pref.mode === "daily") {
+    if (!g) g = newGame("daily", pref.hints);
+    else if (!g.done && g.guesses.length === 0) g.hints = pref.hints;
+  } else {
+    if (!g || g.done) g = newGame("unlimited", pref.hints);
+    else if (g.guesses.length === 0) g.hints = pref.hints;
+  }
+  game = g;
+  saveGame();
+  showHot();
+}
+
+function goHome() {
+  closeAllModals();
+  hotPicker.close(); quizPicker.close();
+  clearTimeout(suspenseTimer);
+  activeMode = null; quiz = null;
+  overlay.target = null; overlay.burst = null;
+  $("globeBox").classList.remove("gameover");
+  showScreen("screen-landing");
+  renderLanding();
+  startHero();
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  window.scrollTo(0, 0);
+}
+
+function setLayout(mode) {
+  activeMode = mode;
+  const hot = mode === "hot";
+  $("sideHot").style.display = hot ? "block" : "none";
+  $("sideName").style.display = hot ? "none" : "block";
+  $("legend").style.display = hot ? "block" : "none";
+  $("quizHud").style.display = hot ? "none" : "flex";
+  $("globeTip").textContent = hot ? "Drag to spin · tap a country or dot to guess" : "Drag to spin · pinch or +/− to zoom";
+  $("globeBox").classList.remove("gameover");
+  showScreen("screen-game");
+  resizeGlobe();
+}
+
+// =====================================================================
+// HOT & COLD
+// =====================================================================
+let latestIso = null;
+function newGame(mode, hints) {
+  let answer;
+  if (mode === "daily") answer = dailyAnswer(localDateStr());
+  else { const prev = load("globle.unlimited"); do { answer = C[Math.floor(Math.random() * N)].iso; } while (prev && prev.answer === answer); }
+  return { mode, hints, answer, date: localDateStr(), guesses: [], revealed: [false, false, false], done: false, won: false, gaveUp: false, recorded: false };
+}
+function saveGame() { if (game) store(game.mode === "daily" ? "globle.daily." + game.date : "globle.unlimited", game); }
+
+function showHot() {
+  setLayout("hot");
+  latestIso = null;
+  overlay.pulseUntil = 0; overlay.burst = null;
+  const target = game.done ? game.answer : closestGuess();
+  if (target) { center = C[idxOf[target]].lp.slice(); zoom = game.done ? fitZoom(game.answer) : 1; }
+  else { center = [Math.random() * 360 - 180, 15]; zoom = 1; }
+  restyle();
+  renderHot();
+  if (game.done) setTimeout(openHotEnd, 400);
+}
+
+function closestGuess(excludeAnswer) {
+  let best = null, bd = Infinity;
+  game.guesses.forEach(iso => { if (excludeAnswer && iso === game.answer) return; const d = distKm(iso, game.answer); if (d < bd) { bd = d; best = iso; } });
+  return best;
+}
+
+function renderHot() {
+  $("modeLine").innerHTML =
+    `<span class="chip">${game.mode === "daily" ? "📅 Daily · " + esc(prettyDate(game.date)) : "♾️ Unlimited"}</span>` +
+    `<span class="chip">${game.hints ? "💡 Hints on" : "🚫 No hints"}</span>`;
+  $("guessCard").style.display = game.done ? "none" : "block";
+  $("giveUpBtn").style.display = game.done ? "none" : "block";
+  const sc = $("statusCard");
+  if (game.done) {
+    sc.style.display = "block";
+    sc.className = "card status-card " + (game.won ? "won" : "lost");
+    sc.innerHTML = (game.won
+      ? `<div class="small muted">🎉 You found it in ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}</div>`
+      : `<div class="small muted">🏳️ The mystery country was</div>`) +
+      `<div class="big-name">${esc(nameOf(game.answer))}</div>
+       <div class="btn-row" style="margin-top:10px"><button class="btn secondary small" onclick="openHotEnd()">Results</button>` +
+      (game.mode === "unlimited" ? `<button class="btn small" onclick="nextRound()">Next country ▶</button>` : `<button class="btn small" onclick="goHome()">Menu</button>`) + `</div>`;
+  } else sc.style.display = "none";
+  renderHints();
+  const list = game.guesses.map(iso => ({ iso, d: distKm(iso, game.answer) })).sort((a, b) => a.d - b.d);
+  $("gCount").textContent = game.guesses.length ? `(${game.guesses.length})` : "";
+  const best = list.find(x => x.iso !== game.answer);
+  $("closestPill").textContent = best && !game.won ? `Closest: ${fmtKm(best.d)}` : "";
+  $("guessList").innerHTML = list.length ? list.map((x, k) => {
+    const isAns = x.iso === game.answer;
+    return `<button class="grow ${x.iso === latestIso ? "latest" : ""}" onclick="focusCountry('${x.iso}')">
+      <span class="rank">${k + 1}</span><span class="sw" style="background:${isAns ? GREEN : heat(x.d)}"></span>
+      <span class="nm">${esc(nameOf(x.iso))}</span><span class="km">${isAns ? "🎯 Found" : fmtKm(x.d)}</span></button>`;
+  }).join("") : `<div class="empty">No guesses yet. Try any country to get your first clue.</div>`;
+}
+function focusCountry(iso) { const c = C[idxOf[iso]]; flyTo(c.lp, c.tiny ? Math.max(zoom, 2.5) : zoom); }
+
+// ----- hints -----
+const HINT_AT = [3, 6, 10];
+const DIRS = [["North", "⬆️"], ["North-East", "↗️"], ["East", "➡️"], ["South-East", "↘️"], ["South", "⬇️"], ["South-West", "↙️"], ["West", "⬅️"], ["North-West", "↖️"]];
+function bearing(a, b) {
+  const r = Math.PI / 180, l1 = a[0] * r, p1 = a[1] * r, l2 = b[0] * r, p2 = b[1] * r;
+  const y = Math.sin(l2 - l1) * Math.cos(p2), x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(l2 - l1);
+  return (Math.atan2(y, x) / r + 360) % 360;
+}
+function hintValue(k) {
+  const ans = C[idxOf[game.answer]];
+  if (k === 0) return `It's in <span class="val">${esc(ans.cont)}</span>`;
+  if (k === 1) {
+    const from = closestGuess(true);
+    if (!from) return "Make a guess first";
+    const [dir, arrow] = DIRS[Math.round(bearing(C[idxOf[from]].lp, ans.lp) / 45) % 8];
+    return `From <b>${esc(nameOf(from))}</b> (your closest), head <span class="val">${arrow} ${dir}</span>`;
+  }
+  return `It starts with <span class="val">"${esc(ans.name[0])}"</span>`;
+}
+function renderHints() {
+  const box = $("hintsCard");
+  if (!game.hints) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  const names = [["🌎", "Continent"], ["🧭", "Direction"], ["🔤", "First letter"]];
+  const n = game.guesses.length;
+  box.innerHTML = `<h3><span>💡 Hints</span><span class="closest-pill">${game.revealed.filter(Boolean).length}/3 used</span></h3>` +
+    names.map(([ico, title], k) => {
+      let body;
+      if (game.revealed[k] || game.done) body = `<b class="t">${title}</b>${hintValue(k)}`;
+      else if (n >= HINT_AT[k]) body = `<b class="t">${title}</b><button class="reveal-btn" onclick="revealHint(${k})">Reveal hint</button>`;
+      else body = `<b class="t">${title}</b><span class="lock">🔒 Unlocks after ${HINT_AT[k]} guesses (${HINT_AT[k] - n} to go)</span>`;
+      return `<div class="hint"><div class="ico">${ico}</div><div class="body">${body}</div></div>`;
+    }).join("");
+}
+function revealHint(k) { game.revealed[k] = true; saveGame(); renderHints(); }
+
+// ----- guessing -----
+const hotPicker = makePicker($("guessInput"), $("guessSuggest"), {
+  onPick: iso => submitGuess(iso),
+  tag: iso => game && game.guesses.includes(iso) ? "guessed" : ""
+});
+
+function submitGuess(iso) {
+  if (!game || game.done) return;
+  const c = C[idxOf[iso]];
+  if (game.guesses.includes(iso)) { toast(`You already guessed ${c.name}`); focusCountry(iso); return; }
+  const prevBest = game.guesses.length ? distKm(closestGuess(), game.answer) : null;
+  game.guesses.push(iso);
+  latestIso = iso;
+  if (iso === game.answer) { finish(true); return; }
+  const d = distKm(iso, game.answer);
+  if (d === 0) toast(`🔥🔥 ${c.name} is bordering it!`);
+  else if (prevBest === null) toast(`${c.name}: ${fmtKm(d)} away`);
+  else if (d < prevBest) toast(`🔥 Warmer! New closest: ${fmtKm(d)}`);
+  else toast(`🧊 Colder: ${fmtKm(d)}`);
+  saveGame();
+  restyle();
+  renderHot();
+  flyTo(c.lp, c.tiny ? Math.max(zoom, 2.5) : zoom);
+}
+
+function finish(won) {
+  if (game.done) return;
+  game.done = true; game.won = won; game.gaveUp = !won;
+  recordHotStats();
+  saveGame();
+  restyle();
+  renderHot();
+  hotPicker.close();
+  flyTo(C[idxOf[game.answer]].lp, fitZoom(game.answer), 1400);
+  overlay.pulseUntil = performance.now() + 5000;
+  if (won) {
+    setTimeout(() => celebrate(), 1100);
+    setTimeout(openHotEnd, 2600);
+  } else setTimeout(openHotEnd, 1500);
+}
+function nextRound() {
+  closeAllModals();
+  game = newGame("unlimited", game.hints);
+  saveGame();
+  showHot();
+}
+
+// =====================================================================
+// NAME IT
+// =====================================================================
+const quizPicker = makePicker($("quizInput"), $("quizSuggest"), {
+  onPick: iso => answerQuiz(iso),
+  blurOnPick: true
+});
+let suspenseTimer = null;
+
+function startQuiz() {
+  clearTimeout(suspenseTimer);
+  quiz = {
+    style: pref.qStyle, goal: pref.qGoal, maxLives: pref.qLives, lives: pref.qLives,
+    order: shuffle(C.map(c => c.iso)), pos: 0, found: 0, wrong: 0, streak: 0, bestStreak: 0,
+    results: {}, current: null, options: [], chosen: -1, phase: "ask", qn: 0, recorded: false
+  };
+  overlay.burst = null;
+  setLayout("name");
+  center = [Math.random() * 360 - 180, 10]; zoom = 1;
+  $("modeLine").innerHTML = `<span class="chip">📍 Name it</span><span class="chip">${quiz.style === "show" ? "🎤 Game show" : "⌨️ Type it"}</span>`;
+  $("typeCard").style.display = quiz.style === "type" ? "block" : "none";
+  $("typeResult").style.display = "none";
+  $("stage").style.display = quiz.style === "show" ? "block" : "none";
+  renderHud();
+  nextQuestion();
+}
+
+function renderHud(breakIdx = -1) {
+  $("hearts").innerHTML = Array.from({ length: quiz.maxLives }, (_, i) => {
+    const cls = i === breakIdx ? "breaking" : i < quiz.lives ? "" : "lost";
+    return `<span class="heart ${cls}"><span class="h l">❤️</span><span class="h r">❤️</span></span>`;
+  }).join("");
+  if (breakIdx >= 0) setTimeout(() => { const h = $("hearts").children[breakIdx]; if (h) h.className = "heart lost"; }, 950);
+  $("hudCount").textContent = `${quiz.found} / ${quiz.goal}`;
+  $("hudBar").style.width = (quiz.found / quiz.goal * 100) + "%";
+  $("streak").textContent = quiz.streak >= 3 ? `🔥 ${quiz.streak} in a row!` : "";
+}
+
+function quizZoom(iso) {
+  if (C[idxOf[iso]].tiny) return 4;
+  return Math.max(1, Math.min(6, fitZoom(iso, 0.32, 99)));
+}
+
+// three wrong answers: two of the target's near neighbours plus one more from the same continent
+function makeOptions(t) {
+  const near = C.filter(c => c.iso !== t).map(c => ({ iso: c.iso, d: distKm(c.iso, t) })).sort((a, b) => a.d - b.d).slice(0, 14);
+  const picks = shuffle(near.slice()).slice(0, 2).map(x => x.iso);
+  const cont = C[idxOf[t]].cont;
+  const pool = shuffle(C.filter(c => c.iso !== t && !picks.includes(c.iso) && c.cont === cont).map(c => c.iso));
+  picks.push(pool[0] || shuffle(C.filter(c => c.iso !== t && !picks.includes(c.iso)).map(c => c.iso))[0]);
+  return shuffle([t, ...picks]);
+}
+
+function nextQuestion() {
+  if (!quiz || quiz.phase === "over" || quiz.found >= quiz.goal || quiz.lives <= 0) return;
+  quiz.current = quiz.order[quiz.pos++ % quiz.order.length];
+  quiz.qn++;
+  quiz.phase = "ask"; quiz.chosen = -1;
+  overlay.target = quiz.current;
+  restyle();
+  flyTo(C[idxOf[quiz.current]].lp, quizZoom(quiz.current), 1300);
+  if (quiz.style === "type") {
+    $("typeResult").style.display = "none";
+    $("typeCard").style.display = "block";
+    $("quizInput").value = "";
+  } else {
+    quiz.options = makeOptions(quiz.current);
+    $("qTitle").textContent = `Question ${quiz.qn}`;
+    renderOptions();
+    $("confirmBar").classList.remove("show");
+    $("drum").classList.remove("show");
+    $("stageNext").classList.remove("show");
+    $("stage").classList.remove("suspense");
+    $("stamp").className = "stamp";
+    $("stageMsg").textContent = "Pick your answer";
+  }
+}
+
+// ----- typing style -----
+function passQuestion() { if (quiz && quiz.phase === "ask") answerQuiz(null); }
+
+function answerQuiz(iso) {
+  if (!quiz || quiz.phase !== "ask") return;
+  quiz.phase = "reveal";
+  const correct = iso === quiz.current;
+  const ans = nameOf(quiz.current);
+  scoreAnswer(correct);
+  const box = $("typeResult");
+  $("typeCard").style.display = "none";
+  box.style.display = "block";
+  box.className = "card qresult " + (correct ? "ok" : "no");
+  const last = quiz.found >= quiz.goal || quiz.lives <= 0;
+  box.innerHTML = (correct
+    ? `<div class="small muted">✅ Correct!</div><div class="big-name">${esc(ans)}</div>`
+    : `<div class="small muted">${iso ? `❌ Not ${esc(nameOf(iso))}. It was…` : "🤷 It was…"}</div><div class="big-name">${esc(ans)}</div>`) +
+    (last ? "" : `<button class="btn" id="typeNext" onclick="nextQuestion()">Next country ▶</button>`);
+  if (!last) setTimeout(() => { const b = $("typeNext"); if (b) b.focus({ preventScroll: true }); }, 50);
+}
+
+// ----- game show style -----
+function renderOptions() {
+  const keys = ["A", "B", "C", "D"];
+  $("opts").innerHTML = quiz.options.map((iso, k) =>
+    `<button class="opt" id="opt${k}" onclick="chooseOption(${k})"><span class="in"><span class="k">${keys[k]}:</span> ${esc(nameOf(iso))}</span></button>`).join("");
+}
+function chooseOption(k) {
+  if (!quiz || (quiz.phase !== "ask" && quiz.phase !== "confirm")) return;
+  quiz.phase = "confirm"; quiz.chosen = k;
+  quiz.options.forEach((_, i) => $("opt" + i).classList.toggle("sel", i === k));
+  $("stageMsg").textContent = `${nameOf(quiz.options[k])}… is that your final answer?`;
+  $("confirmBar").classList.add("show");
+}
+function showCancel() {
+  if (!quiz || quiz.phase !== "confirm") return;
+  quiz.phase = "ask"; quiz.chosen = -1;
+  quiz.options.forEach((_, i) => $("opt" + i).classList.remove("sel"));
+  $("confirmBar").classList.remove("show");
+  $("stageMsg").textContent = "Take your time…";
+}
+function showLockIn() {
+  if (!quiz || quiz.phase !== "confirm") return;
+  quiz.phase = "suspense";
+  const k = quiz.chosen;
+  $("confirmBar").classList.remove("show");
+  quiz.options.forEach((_, i) => { const el = $("opt" + i); el.classList.remove("sel"); el.classList.toggle("dim", i !== k); el.classList.toggle("locked", i === k); });
+  $("stage").classList.add("suspense");
+  const lines = ["Locked in", "The answer is", "Let's find out", "Drumroll please"];
+  $("stageMsg").innerHTML = `${lines[Math.floor(Math.random() * lines.length)]}<span class="dots"></span>`;
+  const dur = 2000 + Math.random() * 1400;
+  const bar = $("drumBar");
+  $("drum").classList.add("show");
+  bar.style.transition = "none"; bar.style.width = "0";
+  requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `width ${dur}ms linear`; bar.style.width = "100%"; }));
+  suspenseTimer = setTimeout(revealShow, dur);
+}
+function revealShow() {
+  if (!quiz || quiz.phase !== "suspense") return;
+  quiz.phase = "reveal";
+  const k = quiz.chosen;
+  const correct = quiz.options[k] === quiz.current;
+  $("stage").classList.remove("suspense");
+  $("drum").classList.remove("show");
+  const right = quiz.options.indexOf(quiz.current);
+  const elK = $("opt" + k), elR = $("opt" + right);
+  elK.classList.remove("locked");
+  if (correct) elK.classList.add("right");
+  else { elK.classList.add("wrong"); elR.classList.remove("dim"); elR.classList.add("right"); }
+  const stamp = $("stamp");
+  stamp.className = "stamp " + (correct ? "ok" : "no");
+  stamp.textContent = correct ? "CORRECT!" : "WRONG!";
+  void stamp.offsetWidth; stamp.classList.add("show");
+  $("stageMsg").textContent = correct ? `Yes! It's ${nameOf(quiz.current)} 🎉` : `It was ${nameOf(quiz.current)}`;
+  if (correct) { const r = elK.getBoundingClientRect(); sparkBurst(r.left + r.width / 2, r.top + r.height / 2, ["#ffd56b", "#4ade80", "#ffffff"]); }
+  scoreAnswer(correct);
+  if (quiz.found < quiz.goal && quiz.lives > 0) setTimeout(() => { if (quiz && quiz.phase === "reveal") $("stageNext").classList.add("show"); }, 900);
+}
+
+// ----- shared scoring + animations -----
+function scoreAnswer(correct) {
+  const iso = quiz.current;
+  quiz.results[iso] = correct ? "ok" : "bad";
+  if (correct) {
+    quiz.found++; quiz.streak++; quiz.bestStreak = Math.max(quiz.bestStreak, quiz.streak);
+    renderHud();
+    const hc = $("hudCount"); hc.classList.remove("bump"); void hc.offsetWidth; hc.classList.add("bump");
+    floatBadge(quiz.streak >= 3 ? `+1 🔥${quiz.streak}` : "+1");
+    overlay.burst = { iso, t0: performance.now(), color: "47,158,88" };
+    const r = $("globeBox").getBoundingClientRect();
+    miniBurst(r.left + r.width / 2, r.top + r.height * 0.42);
+  } else {
+    quiz.wrong++; quiz.streak = 0;
+    quiz.lives--;
+    renderHud(quiz.lives);
+    const h = $("hurt"); h.classList.remove("go"); void h.offsetWidth; h.classList.add("go");
+    const gb = $("globeBox"); gb.classList.remove("shake"); void gb.offsetWidth; gb.classList.add("shake");
+    overlay.burst = { iso, t0: performance.now(), color: "220,38,38" };
+  }
+  restyle();
+  if (quiz.found >= quiz.goal) setTimeout(winQuiz, 1300);
+  else if (quiz.lives <= 0) setTimeout(loseQuiz, 1300);
+}
+
+function floatBadge(text) {
+  const b = $("floatBadge");
+  b.textContent = text;
+  b.classList.remove("go"); void b.offsetWidth; b.classList.add("go");
+}
+
+function recordQuizStats(won) {
+  if (quiz.recorded) return;
+  quiz.recorded = true;
+  const s = Object.assign({ played: 0, wins: 0, perfect: 0, found: 0, wrong: 0, bestStreak: 0, bestGoal: 0 }, load("globle.quiz.v1") || {});
+  s.played++;
+  if (won) { s.wins++; s.bestGoal = Math.max(s.bestGoal, quiz.goal); if (quiz.wrong === 0) s.perfect++; }
+  s.found += quiz.found; s.wrong += quiz.wrong;
+  s.bestStreak = Math.max(s.bestStreak, quiz.bestStreak);
+  store("globle.quiz.v1", s);
+}
+
+function winQuiz() {
+  if (!quiz || quiz.phase === "over") return;
+  quiz.phase = "over";
+  recordQuizStats(true);
+  overlay.target = null; restyle();
+  flyTo(center.slice(), 1, 1200);
+  celebrate();
+  const stars = quiz.lives === quiz.maxLives ? 3 : quiz.lives / quiz.maxLives >= 0.5 ? 2 : 1;
+  setTimeout(() => {
+    if (!quiz) return;
+    $("endBody").className = "modal";
+    $("endBody").innerHTML = `
+      <div class="win-burst">🏆</div>
+      <h2>You did it!</h2>
+      <p class="sub">All ${quiz.goal} countries found with ${quiz.lives} ${quiz.lives === 1 ? "heart" : "hearts"} to spare</p>
+      <div class="stars">${[0, 1, 2].map(i => `<span class="${i < stars ? "on" : "off"}" style="animation-delay:${0.3 + i * 0.25}s">⭐</span>`).join("")}</div>
+      ${quizSummary()}
+      <div class="btn-row"><button class="btn secondary" onclick="goHome()">🏠 Menu</button><button class="btn" onclick="closeAllModals();startQuiz()">Play again</button></div>`;
+    openModal("endModal");
+  }, 1500);
+}
+
+function loseQuiz() {
+  if (!quiz || quiz.phase === "over") return;
+  quiz.phase = "over";
+  recordQuizStats(false);
+  overlay.target = null; restyle();
+  $("globeBox").classList.add("gameover");
+  setTimeout(() => {
+    if (!quiz) return;
+    $("endBody").className = "modal quake";
+    $("endBody").innerHTML = `
+      <div class="broken">💔</div>
+      <h2>Game over</h2>
+      <p class="sub">You ran out of hearts after finding ${quiz.found} of ${quiz.goal}</p>
+      ${quizSummary()}
+      <div class="btn-row"><button class="btn secondary" onclick="goHome()">🏠 Menu</button><button class="btn" onclick="closeAllModals();startQuiz()">Try again</button></div>`;
+    openModal("endModal");
+  }, 900);
+}
+
+function quizSummary() {
+  const total = quiz.found + quiz.wrong;
+  return `<div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+    <div><div class="n">${quiz.found}</div><div class="l">Correct</div></div>
+    <div><div class="n">${total ? Math.round(quiz.found / total * 100) : 0}%</div><div class="l">Accuracy</div></div>
+    <div><div class="n">${quiz.bestStreak}</div><div class="l">Best run</div></div></div>`;
+}
+
+// keyboard shortcuts for the game show (A–D or 1–4, Enter to confirm / continue)
+document.addEventListener("keydown", e => {
+  if (activeMode !== "name" || !quiz || quiz.style !== "show" || document.activeElement.tagName === "INPUT") return;
+  const k = "abcd".indexOf(e.key.toLowerCase()), n = "1234".indexOf(e.key);
+  const idx = k >= 0 ? k : n;
+  if (idx >= 0 && (quiz.phase === "ask" || quiz.phase === "confirm")) chooseOption(idx);
+  else if (e.key === "Enter" && quiz.phase === "confirm") { e.preventDefault(); showLockIn(); }
+  else if (e.key === "Enter" && quiz.phase === "reveal" && $("stageNext").classList.contains("show")) { e.preventDefault(); nextQuestion(); }
+});
+
+// =====================================================================
+// STATS
+// =====================================================================
+const BUCKETS = [[1, 3, "1–3"], [4, 6, "4–6"], [7, 10, "7–10"], [11, 15, "11–15"], [16, 25, "16–25"], [26, 1e9, "26+"]];
+function blankStats() { return { played: 0, wins: 0, total: 0, best: null, cur: 0, max: 0, lastWin: null, noHint: 0, dist: [0, 0, 0, 0, 0, 0] }; }
+function getStats() { const s = load("globle.stats.v1") || {}; return { daily: Object.assign(blankStats(), s.daily), unlimited: Object.assign(blankStats(), s.unlimited) }; }
+function recordHotStats() {
+  if (game.recorded) return;
+  game.recorded = true;
+  const all = getStats(), s = all[game.mode];
+  s.played++;
+  if (game.won) {
+    const n = game.guesses.length;
+    s.wins++; s.total += n;
+    s.best = s.best === null ? n : Math.min(s.best, n);
+    s.dist[BUCKETS.findIndex(b => n >= b[0] && n <= b[1])]++;
+    if (!game.revealed.some(Boolean)) s.noHint++;
+    if (game.mode === "daily") s.cur = s.lastWin === yesterdayOf(game.date) ? s.cur + 1 : 1;
+    else s.cur++;
+    s.lastWin = game.mode === "daily" ? game.date : null;
+  } else s.cur = 0;
+  s.max = Math.max(s.max, s.cur);
+  store("globle.stats.v1", all);
+}
+function currentStreak(mode, s) {
+  if (mode !== "daily") return s.cur;
+  const today = localDateStr();
+  return (s.lastWin === today || s.lastWin === yesterdayOf(today)) ? s.cur : 0;
+}
+let statsTab = "daily";
+function openStats() {
+  renderStats(activeMode === "name" ? "name" : activeMode === "hot" ? game.mode : pref.game === "name" ? "name" : pref.mode);
+  openModal("statsModal");
+}
+function renderStats(tab) {
+  statsTab = tab;
+  ["daily", "unlimited", "name"].forEach(t => $("tab-" + t).classList.toggle("sel", t === tab));
+  if (tab === "name") {
+    const s = Object.assign({ played: 0, wins: 0, perfect: 0, found: 0, wrong: 0, bestStreak: 0, bestGoal: 0 }, load("globle.quiz.v1") || {});
+    const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+    const acc = s.found + s.wrong ? Math.round(s.found / (s.found + s.wrong) * 100) : 0;
+    $("statsBody").innerHTML = `
+      <div class="stat-row">
+        <div><div class="n">${s.played}</div><div class="l">Played</div></div>
+        <div><div class="n">${pct}%</div><div class="l">Win rate</div></div>
+        <div><div class="n">${s.perfect}</div><div class="l">Perfect games</div></div>
+        <div><div class="n">${s.bestStreak}</div><div class="l">Best run</div></div>
+      </div>
+      <div class="stat-row" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+        <div><div class="n">${s.found}</div><div class="l">Countries identified</div></div>
+        <div><div class="n">${acc}%</div><div class="l">Accuracy</div></div>
+        <div><div class="n">${s.bestGoal || "–"}</div><div class="l">Biggest win</div></div>
+      </div>`;
+    return;
+  }
+  const s = getStats()[tab];
+  const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+  const avg = s.wins ? (s.total / s.wins).toFixed(1) : "–";
+  const maxB = Math.max(1, ...s.dist);
+  $("statsBody").innerHTML = `
+    <div class="stat-row">
+      <div><div class="n">${s.played}</div><div class="l">Played</div></div>
+      <div><div class="n">${pct}%</div><div class="l">Win rate</div></div>
+      <div><div class="n">${currentStreak(tab, s)}</div><div class="l">Current streak</div></div>
+      <div><div class="n">${s.max}</div><div class="l">Best streak</div></div>
+    </div>
+    <div class="stat-row" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+      <div><div class="n">${avg}</div><div class="l">Avg guesses</div></div>
+      <div><div class="n">${s.best ?? "–"}</div><div class="l">Fewest guesses</div></div>
+      <div><div class="n">${s.noHint}</div><div class="l">Wins with no hints</div></div>
+    </div>
+    <div class="section-label" style="margin-top:4px">Guesses needed</div>
+    ${BUCKETS.map((b, k) => `<div class="dist-row"><span class="lb">${b[2]}</span>
+      <span class="bar ${s.dist[k] ? "" : "zero"}" style="width:${Math.max(8, s.dist[k] / maxB * 100)}%">${s.dist[k]}</span></div>`).join("")}`;
+}
+function resetStats() {
+  const what = statsTab === "name" ? "Name it" : "Hot & Cold";
+  if (!confirm(`Reset your ${what} stats on this device?`)) return;
+  if (statsTab === "name") store("globle.quiz.v1", {}); else store("globle.stats.v1", {});
+  renderStats(statsTab);
+}
+
+// =====================================================================
+// HOT & COLD END MODAL + SHARE
+// =====================================================================
+let countdownTimer = null;
+function shareText() {
+  const sq = d => d < 1500 ? "🟥" : d < 5000 ? "🟧" : "🟨";
+  const path = game.guesses.map(iso => iso === game.answer ? "🟩" : sq(distKm(iso, game.answer))).join("");
+  const head = game.mode === "daily" ? `🌍 Globle Daily · ${prettyDate(game.date)}` : "🌍 Globle Unlimited";
+  const used = game.revealed.filter(Boolean).length;
+  const line = game.won ? `Found it in ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}${game.hints ? ` · ${used} hint${used === 1 ? "" : "s"}` : " · no hints"}` : `Gave up after ${game.guesses.length} guesses`;
+  return `${head}\n${line}\n${path}`;
+}
+function share() {
+  const text = shareText();
+  const done = () => { const el = $("shareMsg"); if (el) el.textContent = "Copied! Paste it to your friends 📋"; };
+  const fallback = () => { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(fallback);
+  else fallback();
+}
+function openHotEnd() {
+  if (activeMode !== "hot") return;
+  const s = getStats()[game.mode];
+  const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+  const ans = C[idxOf[game.answer]];
+  const used = game.revealed.filter(Boolean).length;
+  const top = game.won
+    ? `<div class="win-burst">🎉</div><h2>You found it!</h2><div class="big-name">${esc(ans.name)}</div>
+       <p class="sub" style="margin-top:6px">${esc(ans.cont)} · ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}${game.hints ? ` · ${used} hint${used === 1 ? "" : "s"} used` : ""}</p>`
+    : `<div class="win-burst" style="animation:none">🗺️</div><h2>The answer was</h2><div class="big-name">${esc(ans.name)}</div>
+       <p class="sub" style="margin-top:6px">${esc(ans.cont)} · ${game.guesses.length} guesses made</p>`;
+  const next = game.mode === "daily"
+    ? `<p class="small muted" style="text-align:center;margin:4px 0 2px">Next daily country in</p><div class="countdown" id="countdown">--:--:--</div>
+       <div class="btn-row" style="margin-top:12px"><button class="btn secondary" onclick="closeModal('endModal')">View map</button>
+       <button class="btn" onclick="pref.mode='unlimited';savePref();closeAllModals();play()">Try Unlimited</button></div>`
+    : `<div class="btn-row" style="margin-top:4px"><button class="btn secondary" onclick="closeModal('endModal')">View map</button>
+       <button class="btn" onclick="nextRound()">Next country ▶</button></div>`;
+  $("endBody").className = "modal";
+  $("endBody").innerHTML = `${top}
+    <div class="stat-row">
+      <div><div class="n">${s.played}</div><div class="l">Played</div></div>
+      <div><div class="n">${pct}%</div><div class="l">Win rate</div></div>
+      <div><div class="n">${currentStreak(game.mode, s)}</div><div class="l">Streak</div></div>
+      <div><div class="n">${s.best ?? "–"}</div><div class="l">Best</div></div>
+    </div>
+    <button class="btn green" onclick="share()">📋 Share result</button>
+    <p class="small muted" id="shareMsg" style="text-align:center;min-height:1em;margin:6px 0"></p>
+    ${next}
+    <button class="btn secondary small" style="margin-top:8px" onclick="goHome()">🏠 Menu</button>`;
+  openModal("endModal");
+  clearInterval(countdownTimer);
+  if (game.mode === "daily") {
+    const tickCd = () => {
+      const now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const s2 = Math.max(0, Math.floor((mid - now) / 1000));
+      const el = $("countdown"); if (!el) return clearInterval(countdownTimer);
+      el.textContent = [Math.floor(s2 / 3600), Math.floor(s2 / 60) % 60, s2 % 60].map(v => String(v).padStart(2, "0")).join(":");
+    };
+    tickCd(); countdownTimer = setInterval(tickCd, 1000);
+  }
+}
+
+// =====================================================================
+// MODALS + TOAST
+// =====================================================================
+function openModal(id) { $(id).classList.add("show"); }
+function closeModal(id) { $(id).classList.remove("show"); if (id === "endModal") clearInterval(countdownTimer); }
+function closeAllModals() { document.querySelectorAll(".modal-back").forEach(m => m.classList.remove("show")); clearInterval(countdownTimer); }
+let toastTimer = null;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// =====================================================================
+// GLOBE RENDERER
+//  - base canvas: land + borders, redrawn only when the view or colours change
+//  - fx canvas: rings and pulses, animated without redrawing the map
+//  - while moving, the light map is drawn; full detail returns 150 ms after it settles
+// =====================================================================
+const canvas = $("globe"), ctx = canvas.getContext("2d");
+const fxg = $("globeFx"), fctx = fxg.getContext("2d");
+let size = 400, dpr = 1, center = [20, 15], zoom = 1;
+const proj = d3.geoOrthographic().clipAngle(90).precision(0.8);
+const gpath = d3.geoPath(proj, ctx);
+const GRAT = d3.geoGraticule10();
+const MIN_Z = 1, MAX_Z = 14;
+const NEUTRAL = { fill: LAND, stroke: "rgba(255,255,255,0.95)", lw: 0.6 };
+const OTHER = { fill: LAND_OTHER, stroke: "rgba(255,255,255,0.95)", lw: 0.6 };
+let styleMap = new Map();
+let dots = [];
+const overlay = { pulseUntil: 0, target: null, burst: null };
+let moving = false, settleTimer = null, baseDirty = true, fxHadContent = false;
+
+function baseR() { return size / 2 - 8; }
+function setProj() { proj.scale(baseR() * zoom).translate([size / 2, size / 2]).rotate([-center[0], -center[1], 0]); }
+function resizeGlobe() {
+  size = Math.max(200, Math.round($("globeBox").clientWidth));
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  fxg.width = size * dpr; fxg.height = size * dpr;
+  baseDirty = true; requestFrame();
+}
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { if ($("screen-game").classList.contains("active")) resizeGlobe(); fxResize(); }, 120);
+});
+
+// work out every country's colour once per change, instead of on every frame
+function restyle() {
+  styleMap = new Map(); dots = [];
+  const styled = fill => ({ fill, stroke: "rgba(60,30,20,0.45)", lw: 0.8 });
+  if (activeMode === "hot" && game) {
+    game.guesses.forEach(iso => styleMap.set(iso, styled(heat(distKm(iso, game.answer)))));
+    if (game.done) styleMap.set(game.answer, styled(GREEN));
+    C.forEach(c => { if (c.tiny) dots.push({ lp: c.lp, fill: styleMap.has(c.iso) ? styleMap.get(c.iso).fill : null }); });
+  } else if (activeMode === "name" && quiz) {
+    for (const iso in quiz.results) styleMap.set(iso, styled(quiz.results[iso] === "ok" ? QUIZ_OK : QUIZ_BAD));
+    if (quiz.current && quiz.phase !== "over") {
+      const res = quiz.results[quiz.current];
+      styleMap.set(quiz.current, { fill: res === "ok" ? GREEN : res === "bad" ? "#dc2626" : TARGET, stroke: "#1d2433", lw: 1.4 });
+    }
+    C.forEach(c => { if (c.tiny && styleMap.has(c.iso)) dots.push({ lp: c.lp, fill: styleMap.get(c.iso).fill }); });
+  }
+  baseDirty = true; requestFrame();
+}
+
+function viewLimit() { return Math.asin(Math.min(1, size * 0.72 / (baseR() * zoom))); }
+function onScreen(lp) { return d3.geoDistance(lp, center) < Math.min(Math.PI / 2 - 0.03, viewLimit() + 0.05); }
+
+function drawBase() {
+  setProj();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+  const R = baseR() * zoom, cx = size / 2, cy = size / 2;
+  const og = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.05, cx, cy, R);
+  og.addColorStop(0, "#f1f9ff"); og.addColorStop(1, "#a8d0ea");
+  ctx.beginPath(); gpath({ type: "Sphere" }); ctx.fillStyle = og; ctx.fill();
+  if (!moving) { ctx.beginPath(); gpath(GRAT); ctx.strokeStyle = "rgba(50,100,140,0.12)"; ctx.lineWidth = 0.7; ctx.stroke(); }
+
+  // group countries by colour so each colour is a single fill + stroke
+  const lim = Math.min(Math.PI / 2, viewLimit()) + 0.02;
+  const groups = new Map([[NEUTRAL, []], [OTHER, []]]);
+  const feats = moving ? FEAT_LO : zoom < 2.2 ? FEAT_MID : FEAT_HI;
+  for (let i = 0; i < feats.length; i++) {
+    const f = feats[i];
+    if (d3.geoDistance(f.cen, center) - f.rad > lim) continue;
+    const st = f.isC ? (styleMap.get(f.key) || NEUTRAL) : OTHER;
+    let arr = groups.get(st); if (!arr) { arr = []; groups.set(st, arr); }
+    arr.push(f);
+  }
+  groups.forEach((list, st) => {
+    if (!list.length) return;
+    ctx.beginPath();
+    for (let i = 0; i < list.length; i++) gpath(list[i]);
+    ctx.fillStyle = st.fill; ctx.fill();
+    ctx.strokeStyle = st.stroke; ctx.lineWidth = st.lw; ctx.stroke();
+  });
+
+  const r = Math.min(9, 4.2 + zoom * 0.25);
+  for (const d of dots) {
+    if (!onScreen(d.lp)) continue;
+    const p = proj(d.lp); if (!p) continue;
+    ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
+    ctx.fillStyle = d.fill || "#ffffff"; ctx.fill();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = d.fill ? "rgba(60,30,20,0.6)" : "#5b6474"; ctx.stroke();
+  }
+  ctx.beginPath(); gpath({ type: "Sphere" }); ctx.strokeStyle = "rgba(40,80,110,0.35)"; ctx.lineWidth = 1.2; ctx.stroke();
+}
+
+function overlayAnimating(now) {
+  return !!overlay.burst ||
+    (activeMode === "hot" && game && game.done && now < overlay.pulseUntil) ||
+    (activeMode === "name" && quiz && overlay.target && quiz.phase !== "over" && C[idxOf[overlay.target]].tiny);
+}
+function drawOverlay(now) {
+  setProj();
+  fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  fctx.clearRect(0, 0, size, size);
+  fxHadContent = false;
+  const ring = (lp, rad, rgb, a, w) => {
+    if (!onScreen(lp)) return; const p = proj(lp); if (!p) return;
+    fctx.beginPath(); fctx.arc(p[0], p[1], rad, 0, Math.PI * 2);
+    fctx.strokeStyle = `rgba(${rgb},${a})`; fctx.lineWidth = w; fctx.stroke(); fxHadContent = true;
+  };
+  if (activeMode === "hot" && game && game.done) {
+    const lp = C[idxOf[game.answer]].lp;
+    if (now < overlay.pulseUntil) for (let k = 0; k < 3; k++) { const t = (now / 1400 + k / 3) % 1; ring(lp, 10 + t * 42, "47,158,88", (1 - t) * 0.9, 3); }
+    else ring(lp, 24, "47,158,88", 0.6, 3);
+  }
+  if (activeMode === "name" && quiz && overlay.target && quiz.phase !== "over" && C[idxOf[overlay.target]].tiny) {
+    const lp = C[idxOf[overlay.target]].lp, t = (now / 1100) % 1;
+    ring(lp, 9 + t * 26, "124,58,237", 1 - t, 3);
+    ring(lp, 9, "124,58,237", 0.9, 2.5);
+  }
+  if (overlay.burst) {
+    const t = (now - overlay.burst.t0) / 900;
+    if (t >= 1) overlay.burst = null;
+    else { const lp = C[idxOf[overlay.burst.iso]].lp; ring(lp, 14 + t * 90, overlay.burst.color, 1 - t, 6 * (1 - t) + 1); }
+  }
+}
+
+// ----- frame loop -----
+let frameReq = false, flight = null, spinV = null;
+function requestFrame() { if (!frameReq) { frameReq = true; requestAnimationFrame(tick); } }
+function markMoving() {
+  moving = true; baseDirty = true;
+  clearTimeout(settleTimer);
+  settleTimer = setTimeout(() => { moving = false; baseDirty = true; requestFrame(); }, 150);
+}
+function tick(now) {
+  frameReq = false;
+  if (!$("screen-game").classList.contains("active")) return;
+  let more = false;
+  if (flight) { if (flight(now)) more = true; else flight = null; markMoving(); }
+  if (spinV) {
+    center[0] -= spinV[0]; center[1] = Math.max(-85, Math.min(85, center[1] + spinV[1]));
+    spinV[0] *= 0.93; spinV[1] *= 0.93;
+    if (Math.hypot(spinV[0], spinV[1]) < 0.02) spinV = null; else more = true;
+    markMoving();
+  }
+  const moved = baseDirty;
+  if (baseDirty) { drawBase(); baseDirty = false; }
+  const anim = overlayAnimating(now);
+  if (moved || anim || fxHadContent) drawOverlay(now);
+  if (more || anim) requestFrame();
+}
+
+// fly the camera, dipping out to a wider view on long trips so it doesn't whip past at high zoom
+function flyTo(lp, z = zoom, dur = 900) {
+  const from = center.slice(), interp = d3.geoInterpolate(from, lp);
+  const z0 = zoom, far = d3.geoDistance(from, lp) > 0.45, zDip = Math.min(z0, z, 1.3);
+  const t0 = performance.now();
+  spinV = null;
+  flight = now => {
+    const t = Math.min(1, (now - t0) / dur), e = d3.easeCubicInOut(t);
+    center = interp(e);
+    if (far && (z0 > 1.5 || z > 1.5)) zoom = t < 0.5 ? z0 + (zDip - z0) * d3.easeCubicInOut(t * 2) : zDip + (z - zDip) * d3.easeCubicInOut(t * 2 - 1);
+    else zoom = z0 + (z - z0) * e;
+    return t < 1;
+  };
+  requestFrame();
+}
+function zoomBy(f) { flyTo(center.slice(), Math.max(MIN_Z, Math.min(MAX_Z, zoom * f)), 350); }
+function fitZoom(iso, factor = 0.45, cap = 5) {
+  const lp = C[idxOf[iso]].lp;
+  const p = d3.geoOrthographic().clipAngle(90).rotate([-lp[0], -lp[1]]).fitExtent([[0, 0], [size, size]], mainPoly[iso]);
+  return Math.max(MIN_Z, Math.min(cap, p.scale() * factor / baseR()));
+}
+
+// ----- pointer input: drag to spin, pinch/wheel to zoom, tap to inspect -----
+const pointers = new Map();
+let drag = null, pinch = null;
+canvas.addEventListener("pointerdown", e => {
+  canvas.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  flight = null; spinV = null;
+  if (pointers.size === 1) drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now(), moved: 0, vx: 0, vy: 0, lt: performance.now() };
+  else if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), z: zoom }; drag = null; }
+  e.preventDefault();
+});
+canvas.addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    zoom = Math.max(MIN_Z, Math.min(MAX_Z, pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d));
+    markMoving(); requestFrame(); return;
+  }
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  drag.moved = Math.max(drag.moved, Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy));
+  if (drag.moved < 5) return;
+  canvas.classList.add("dragging");
+  const k = (180 / Math.PI) / (baseR() * zoom) * (size / canvas.getBoundingClientRect().width);
+  center[0] -= dx * k;
+  center[1] = Math.max(-85, Math.min(85, center[1] + dy * k));
+  const now = performance.now(), dt = Math.max(1, now - drag.lt);
+  drag.vx = dx * k * 16 / dt; drag.vy = dy * k * 16 / dt; drag.lt = now;
+  markMoving(); requestFrame();
+  e.preventDefault();
+});
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.delete(e.pointerId);
+  canvas.classList.remove("dragging");
+  if (pinch) { if (pointers.size < 2) pinch = null; drag = null; return; }
+  if (!drag) return;
+  if (drag.moved < 6 && performance.now() - drag.t < 500) {
+    const r = canvas.getBoundingClientRect();
+    handleTap((e.clientX - r.left) * size / r.width, (e.clientY - r.top) * size / r.height);
+  } else if (performance.now() - drag.lt < 80 && Math.hypot(drag.vx, drag.vy) > 0.15) {
+    spinV = [drag.vx, drag.vy]; requestFrame();
+  }
+  drag = null;
+}
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  zoom = Math.max(MIN_Z, Math.min(MAX_Z, zoom * Math.exp(-e.deltaY * 0.0015)));
+  markMoving(); requestFrame();
+}, { passive: false });
+canvas.addEventListener("contextmenu", e => e.preventDefault());
+
+function handleTap(x, y) {
+  if (activeMode !== "hot") return;   // no peeking at names in Name it
+  setProj();
+  let best = null, bd = 18;
+  C.forEach(c => {
+    if (!c.tiny || !onScreen(c.lp)) return;
+    const p = proj(c.lp); const d = Math.hypot(p[0] - x, p[1] - y);
+    if (d < bd) { bd = d; best = c.iso; }
+  });
+  if (best) return openMag(best);
+  if (Math.hypot(x - size / 2, y - size / 2) > baseR() * zoom) return;
+  const ll = proj.invert([x, y]); if (!ll) return;
+  for (const f of FEAT_HI) {
+    if (d3.geoDistance(f.cen, ll) > f.rad + 0.01) continue;
+    if (d3.geoContains(f, ll)) {
+      if (f.isC) openMag(f.properties.iso);
+      else if (!game.done) toast(`${f.properties.name} isn't one of the 195 countries`);
+      return;
+    }
+  }
+}
+
+// =====================================================================
+// MAGNIFIER (Hot & Cold)
+// =====================================================================
+function openMag(iso) {
+  const c = C[idxOf[iso]];
+  const guessed = game.guesses.includes(iso);
+  $("magName").textContent = c.name;
+  let sub = c.cont;
+  if (game.done && iso === game.answer) sub += " · 🎯 the mystery country";
+  else if (guessed) sub += " · " + fmtKm(distKm(iso, game.answer)) + (distKm(iso, game.answer) ? " away" : "");
+  else if (c.tiny) sub += " · tiny country, magnified";
+  $("magSub").textContent = sub;
+  const btn = $("magGuessBtn");
+  if (game.done || guessed) btn.style.display = "none";
+  else { btn.style.display = "block"; btn.textContent = "Guess " + c.name; btn.onclick = () => { closeModal("magModal"); submitGuess(iso); }; }
+  openModal("magModal");
+  requestAnimationFrame(() => drawMag(iso));
+}
+function drawMag(iso) {
+  const cv = $("magCanvas");
+  const s = Math.round(cv.clientWidth) || 300, r = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = s * r; cv.height = s * r;
+  const c2 = cv.getContext("2d");
+  c2.setTransform(r, 0, 0, r, 0, 0);
+  const lp = C[idxOf[iso]].lp;
+  const p = d3.geoOrthographic().clipAngle(90).rotate([-lp[0], -lp[1]]).precision(0.3);
+  let target = mainPoly[iso];
+  const b = d3.geoBounds(target);
+  if (Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]) < 0.5) {
+    const h = 0.25;
+    target = { type: "Feature", geometry: { type: "Polygon", coordinates: [[[lp[0] - h, lp[1] - h], [lp[0] - h, lp[1] + h], [lp[0] + h, lp[1] + h], [lp[0] + h, lp[1] - h], [lp[0] - h, lp[1] - h]]] } };
+  }
+  p.fitExtent([[s * 0.22, s * 0.22], [s * 0.78, s * 0.78]], target);
+  if (p.scale() < s * 0.48) p.scale(s * 0.48).translate([s / 2, s / 2]);
+  const pp = d3.geoPath(p, c2);
+  c2.fillStyle = "#cfe4f3"; c2.fillRect(0, 0, s, s);
+  c2.beginPath(); pp({ type: "Sphere" }); c2.fillStyle = "#bcdcf1"; c2.fill();
+  FEAT_HI.forEach(f => {
+    if (f.key === iso || d3.geoDistance(f.cen, lp) - f.rad > Math.PI / 2) return;
+    const st = f.isC ? (styleMap.get(f.key) || NEUTRAL) : OTHER;
+    c2.beginPath(); pp(f); c2.fillStyle = st.fill; c2.fill(); c2.strokeStyle = "#ffffff"; c2.lineWidth = 1; c2.stroke();
+  });
+  const st = styleMap.get(iso);
+  c2.beginPath(); pp(featByIso[iso]);
+  c2.fillStyle = st ? st.fill : "#4f97d6"; c2.fill();
+  c2.strokeStyle = "#1d2433"; c2.lineWidth = 2; c2.stroke();
+  const pt = p(lp);
+  if (pt) { c2.beginPath(); c2.arc(pt[0], pt[1], s * 0.2, 0, Math.PI * 2); c2.setLineDash([6, 6]); c2.strokeStyle = "rgba(29,36,51,0.45)"; c2.lineWidth = 2; c2.stroke(); c2.setLineDash([]); }
+}
+
+// =====================================================================
+// CONFETTI & PARTICLES (lightweight: no save/restore, capped count, 1x resolution)
+// =====================================================================
+const fxCanvas = $("fxCanvas"), fx = fxCanvas.getContext("2d");
+let fxW = 0, fxH = 0, parts = [], fxOn = false, fxLast = 0;
+const MAX_PARTS = 260;
+function fxResize() { fxW = window.innerWidth; fxH = window.innerHeight; fxCanvas.width = fxW; fxCanvas.height = fxH; }
+fxResize();
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const PALETTE = ["#e4572e", "#f9a95a", "#ffd23f", "#2f9e58", "#3fa7d6", "#7b5ea7", "#ff7aa2"];
+function fxAdd(p) {
+  if (parts.length >= MAX_PARTS) return;
+  p.life = 0; parts.push(p);
+  if (!fxOn) { fxOn = true; fxLast = performance.now(); requestAnimationFrame(fxLoop); }
+}
+function fxLoop(now) {
+  const dt = Math.min(0.05, (now - fxLast) / 1000); fxLast = now;
+  fx.setTransform(1, 0, 0, 1, 0, 0);
+  fx.clearRect(0, 0, fxW, fxH);
+  let w = 0;
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i];
+    p.life += dt;
+    if (p.life >= p.max) continue;
+    const k = 1 - p.drag * dt; p.vx *= k; p.vy *= k;
+    p.vy += p.g * dt;
+    p.x += p.vx * dt + (p.sway ? Math.sin(p.life * p.swayF + p.phase) * p.sway * dt : 0);
+    p.y += p.vy * dt;
+    if (p.y > fxH + 30 && p.vy > 0) continue;
+    const t = p.life / p.max;
+    fx.globalAlpha = t > 0.8 ? (1 - t) * 5 : 1;
+    fx.fillStyle = p.color;
+    if (p.kind === 0) {
+      p.rot += p.vr * dt;
+      const c = Math.cos(p.rot), s = Math.sin(p.rot), f = Math.cos(p.life * p.flipF + p.phase);
+      fx.setTransform(c, s, -s * f, c * f, p.x, p.y);
+      fx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    } else {
+      fx.setTransform(1, 0, 0, 1, 0, 0);
+      const r = p.size * (1 - t * 0.5);
+      fx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
+    }
+    parts[w++] = p;
+  }
+  parts.length = w;
+  fx.setTransform(1, 0, 0, 1, 0, 0); fx.globalAlpha = 1;
+  if (w) requestAnimationFrame(fxLoop); else { fxOn = false; fx.clearRect(0, 0, fxW, fxH); }
+}
+function confetto(x, y, vx, vy, g) {
+  fxAdd({ kind: 0, x, y, vx, vy, g, drag: 1.8, rot: rand(0, 6), vr: rand(-8, 8), sway: rand(10, 50), swayF: rand(2, 5), phase: rand(0, 6), flipF: rand(5, 12), size: rand(8, 14), color: pick(PALETTE), max: rand(3.5, 5.5) });
+}
+function sparkBurst(x, y, palette = PALETTE, n = 34) {
+  for (let i = 0; i < n; i++) { const a = rand(0, Math.PI * 2), v = rand(90, 320); fxAdd({ kind: 1, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: 170, drag: 1.3, max: rand(0.8, 1.4), size: rand(1.8, 3.2), color: pick(palette) }); }
+}
+function miniBurst(x, y) { for (let i = 0; i < 26; i++) confetto(x, y, rand(-260, 260), rand(-520, -220), 520); }
+function celebrate() {
+  for (let i = 0; i < 55; i++) {
+    const sp = rand(-0.35, 0.35);
+    confetto(0, fxH, Math.sin(0.75 + sp) * rand(500, 1050), -Math.cos(0.75 + sp) * rand(800, 1400), 450);
+    confetto(fxW, fxH, -Math.sin(0.75 + sp) * rand(500, 1050), -Math.cos(0.75 + sp) * rand(800, 1400), 450);
+  }
+  const end = performance.now() + 3500;
+  const rain = setInterval(() => {
+    if (performance.now() > end) return clearInterval(rain);
+    for (let i = 0; i < 3; i++) confetto(rand(0, fxW), -15, rand(-40, 40), rand(40, 160), 420);
+  }, 100);
+  [400, 1100, 1900].forEach(d => setTimeout(() => sparkBurst(rand(fxW * 0.15, fxW * 0.85), rand(fxH * 0.1, fxH * 0.4), PALETTE, 36), d));
+}
+
+// =====================================================================
+// LANDING HERO GLOBE (light map, 30 fps, only while the menu is showing)
+// =====================================================================
+const hero = $("heroGlobe"), hctx = hero.getContext("2d");
+const HS = 150, hdpr = Math.min(window.devicePixelRatio || 1, 1.5);
+hero.width = HS * hdpr; hero.height = HS * hdpr;
+let heroOn = false, heroRot = -30, heroFrameNo = 0;
+const heroProj = d3.geoOrthographic().clipAngle(90).scale(HS / 2 - 4).translate([HS / 2, HS / 2]).precision(2);
+const heroPath = d3.geoPath(heroProj, hctx);
+const HERO_HOT = { BRA: 0, ARG: 0, PER: 0, PRY: 0, CHL: 0, COL: 1200, URY: 400, VEN: 2200, ECU: 1600 };
+const heroGrad = (() => { const g = hctx.createRadialGradient(HS * 0.35, HS * 0.32, 4, HS / 2, HS / 2, HS / 2); g.addColorStop(0, "#f1f9ff"); g.addColorStop(1, "#a8d0ea"); return g; })();
+function heroFrame() {
+  if (!heroOn) return;
+  requestAnimationFrame(heroFrame);
+  if (heroFrameNo++ % 2) return;
+  heroRot += 0.5;
+  heroProj.rotate([heroRot, -12]);
+  hctx.setTransform(hdpr, 0, 0, hdpr, 0, 0);
+  hctx.clearRect(0, 0, HS, HS);
+  hctx.beginPath(); heroPath({ type: "Sphere" }); hctx.fillStyle = heroGrad; hctx.fill();
+  const ctr = [-heroRot, 12], hot = [];
+  hctx.beginPath();
+  FEAT_LO.forEach(f => {
+    if (d3.geoDistance(f.cen, ctr) - f.rad > Math.PI / 2) return;
+    if (f.key === "BOL" || f.key in HERO_HOT) hot.push(f); else heroPath(f);
+  });
+  hctx.fillStyle = LAND; hctx.fill();
+  hot.forEach(f => { hctx.beginPath(); heroPath(f); hctx.fillStyle = f.key === "BOL" ? GREEN : heat(HERO_HOT[f.key]); hctx.fill(); });
+  hctx.beginPath(); heroPath({ type: "Sphere" }); hctx.strokeStyle = "rgba(40,80,110,0.35)"; hctx.lineWidth = 1; hctx.stroke();
+}
+function startHero() { if (heroOn) return; heroOn = true; requestAnimationFrame(heroFrame); }
+function stopHero() { heroOn = false; }
+
+// =====================================================================
+// BOOT
+// =====================================================================
+renderLanding();
+startHero();
+</script>
+</body>
+</html>
