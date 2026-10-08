@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Globle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --panel: #ffffff;
+    --panel2: #f8f6f1;
+    --ink: #1d2433;
+    --muted: #6b7280;
+    --line: #e4dfd3;
+    --accent: #e4572e;
+    --accent-dark: #c2401b;
+    --green: #2f9e58;
+    --blue: #2f6fb0;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 14px 16px 40px;
+  }
+  h1, h2, h3, .brand, .big-name { font-family: "Fredoka", -apple-system, sans-serif; }
+  button { font-family: inherit; cursor: pointer; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .help-fab {
+    position: fixed; top: 12px; right: 12px; z-index: 60;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--panel); border: 1px solid var(--line); color: var(--accent);
+    font-size: 1.1rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .topbar { display: flex; align-items: center; gap: 10px; margin: 0 52px 12px 0; min-height: 38px; }
+  .brand { font-size: 1.5rem; font-weight: 700; cursor: pointer; user-select: none; }
+  .brand span { color: var(--accent); }
+  .topbar .spacer { flex: 1; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--panel); font-size: 1.05rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+  .btn {
+    display: block; width: 100%; border: none; border-radius: 12px; padding: 13px 14px;
+    font-size: 1rem; font-weight: 700; background: var(--accent); color: #fff;
+    box-shadow: 0 3px 0 var(--accent-dark);
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--accent-dark); }
+  .btn.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 2px 0 var(--line); }
+  .btn.green { background: var(--green); box-shadow: 0 3px 0 #237a43; }
+  .btn.small { padding: 9px 12px; font-size: 0.88rem; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.82rem; }
+
+  /* ---------- LANDING ---------- */
+  .landing { max-width: 520px; margin: 0 auto; }
+  .hero { text-align: center; margin: 4px 0 16px; }
+  #heroGlobe { width: 170px; height: 170px; display: block; margin: 0 auto 6px; }
+  .hero h1 { font-size: 2.3rem; margin: 0; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { margin: 4px 0 0; color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+  .section-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 16px 0 8px; }
+  .mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mode-card {
+    text-align: left; background: var(--panel); border: 2px solid var(--line); border-radius: 14px;
+    padding: 12px; color: var(--ink); transition: border-color 0.15s, transform 0.15s;
+  }
+  .mode-card .ico { font-size: 1.6rem; }
+  .mode-card h3 { margin: 4px 0 2px; font-size: 1.1rem; }
+  .mode-card p { margin: 0; font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
+  .mode-card .status { margin-top: 8px; font-size: 0.78rem; font-weight: 700; color: var(--blue); min-height: 1em; }
+  .mode-card.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(228,87,46,0.15); }
+  .seg { display: flex; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; gap: 4px; }
+  .seg button { flex: 1; border: none; background: transparent; border-radius: 9px; padding: 10px 8px; font-weight: 700; font-size: 0.9rem; color: var(--muted); }
+  .seg button.sel { background: var(--panel); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .seg-note { font-size: 0.8rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  #landingNote { font-size: 0.82rem; color: var(--blue); margin: 10px 0 0; text-align: center; min-height: 1em; }
+
+  /* ---------- GAME ---------- */
+  .game-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 860px) {
+    .game-wrap { grid-template-columns: minmax(0, 1.15fr) minmax(320px, 1fr); align-items: start; }
+    .globe-col { position: sticky; top: 14px; }
+  }
+  .mode-line { font-size: 0.82rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 3px 10px; }
+  .globe-box { position: relative; width: 100%; max-width: 620px; margin: 0 auto; aspect-ratio: 1 / 1; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  #globe { width: 100%; height: 100%; display: block; cursor: grab; }
+  #globe.dragging { cursor: grabbing; }
+  .zoom-ctl { position: absolute; right: 4px; bottom: 4px; display: flex; flex-direction: column; gap: 6px; }
+  .zoom-ctl button {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.92);
+    font-size: 1.3rem; font-weight: 700; color: var(--ink); box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .globe-tip { position: absolute; left: 4px; bottom: 6px; font-size: 0.72rem; color: var(--muted); background: rgba(255,255,255,0.85); padding: 4px 8px; border-radius: 8px; max-width: 60%; }
+  .legend { max-width: 420px; margin: 10px auto 0; }
+  .legend-bar { height: 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+  .legend-labels { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+
+  .guess-box { position: relative; }
+  .guess-row { display: flex; gap: 8px; }
+  #guessInput {
+    flex: 1; min-width: 0; font-size: 1.05rem; padding: 13px 14px; border-radius: 12px;
+    border: 2px solid var(--line); background: var(--panel); color: var(--ink); outline: none;
+  }
+  #guessInput:focus { border-color: var(--accent); }
+  .guess-row .btn { width: auto; padding: 0 18px; }
+  .suggest {
+    position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 40;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12); display: none;
+  }
+  .suggest.show { display: block; }
+  .suggest button {
+    display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px;
+    text-align: left; background: none; border: none; border-bottom: 1px solid var(--line);
+    padding: 11px 14px; font-size: 0.98rem; color: var(--ink);
+  }
+  .suggest button:last-child { border-bottom: none; }
+  .suggest button.hl { background: #fff1ec; }
+  .suggest .alias { font-size: 0.75rem; color: var(--muted); }
+  .suggest .done { font-size: 0.72rem; color: var(--muted); font-weight: 700; }
+  .toast {
+    position: fixed; left: 50%; top: 14px; transform: translate(-50%, -8px);
+    background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 20px; font-weight: 700; font-size: 0.88rem;
+    white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 150; box-shadow: 0 6px 18px rgba(0,0,0,0.2); max-width: 92vw; overflow: hidden; text-overflow: ellipsis;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .hints h3, .list-card h3 { margin: 0 0 10px; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .hint { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+  .hint:first-of-type { border-top: none; }
+  .hint .ico { font-size: 1.3rem; width: 28px; text-align: center; }
+  .hint .body { flex: 1; font-size: 0.9rem; line-height: 1.35; }
+  .hint .body b { display: block; font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .hint .lock { color: var(--muted); font-size: 0.85rem; }
+  .hint .reveal-btn { border: 1px solid var(--accent); background: #fff1ec; color: var(--accent-dark); border-radius: 10px; padding: 7px 12px; font-weight: 700; font-size: 0.85rem; }
+  .hint .val { font-weight: 700; font-size: 1rem; }
+
+  .closest-pill { font-size: 0.8rem; font-family: -apple-system, sans-serif; color: var(--muted); font-weight: 600; }
+  .glist { display: flex; flex-direction: column; gap: 6px; }
+  .grow {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--panel2);
+    border: 1px solid transparent; cursor: pointer; text-align: left; width: 100%; color: var(--ink); font-size: 0.95rem;
+  }
+  .grow.latest { border-color: var(--accent); animation: rowIn 0.45s ease; }
+  @keyframes rowIn { from { transform: scale(0.96); opacity: 0.3; } to { transform: scale(1); opacity: 1; } }
+  .grow .sw { width: 22px; height: 22px; border-radius: 6px; flex: 0 0 auto; border: 1px solid rgba(0,0,0,0.15); }
+  .grow .nm { flex: 1; font-weight: 600; }
+  .grow .km { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.88rem; }
+  .grow .rank { width: 22px; font-size: 0.75rem; color: var(--muted); text-align: right; }
+  .empty { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 8px 0; }
+
+  .status-card { text-align: center; border-width: 2px; }
+  .status-card.won { border-color: var(--green); background: #f0faf3; }
+  .status-card.lost { border-color: var(--blue); background: #eef5fc; }
+  .status-card .big-name { font-size: 1.5rem; font-weight: 700; margin: 2px 0; }
+
+  /* ---------- MODALS ---------- */
+  .modal-back { position: fixed; inset: 0; background: rgba(29,36,51,0.45); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal-back.show { display: flex; }
+  .modal { background: var(--panel); border-radius: 18px; padding: 18px; width: 100%; max-width: 400px; max-height: 92vh; overflow: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.25); animation: popIn 0.35s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal h2 { margin: 0 0 4px; font-size: 1.4rem; text-align: center; }
+  .modal .sub { text-align: center; color: var(--muted); font-size: 0.9rem; margin: 0 0 12px; }
+  #magCanvas { width: 100%; aspect-ratio: 1 / 1; border-radius: 14px; display: block; margin-bottom: 12px; background: #dbeaf5; }
+  .big-name { font-size: 2rem; font-weight: 700; text-align: center; line-height: 1.1; }
+  .win-burst { text-align: center; font-size: 3rem; animation: bounceY 1.2s ease-in-out infinite; }
+  @keyframes bounceY { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-8px) rotate(6deg); } }
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0; text-align: center; }
+  .stat-row .n { font-family: "Fredoka", sans-serif; font-size: 1.5rem; font-weight: 700; }
+  .stat-row .l { font-size: 0.7rem; color: var(--muted); line-height: 1.2; }
+  .tabs { display: flex; gap: 4px; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 10px; }
+  .tabs button { flex: 1; border: none; background: transparent; border-radius: 9px; padding: 8px; font-weight: 700; color: var(--muted); }
+  .tabs button.sel { background: var(--panel); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 0.8rem; }
+  .dist-row .lb { width: 46px; color: var(--muted); font-weight: 600; text-align: right; }
+  .dist-row .bar { height: 20px; background: var(--accent); color: #fff; border-radius: 5px; font-weight: 700; display: flex; align-items: center; justify-content: flex-end; padding: 0 6px; min-width: 22px; }
+  .dist-row .bar.zero { background: var(--line); color: var(--muted); }
+  .countdown { font-family: "Fredoka", sans-serif; font-size: 1.4rem; font-weight: 700; text-align: center; }
+
+  #fxCanvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 200; }
+</style>
+</head>
+<body>
+
+<a class="help-fab" href="globle-help.html" target="_blank" rel="noopener" aria-label="How to play">?</a>
+
+<!-- LANDING -->
+<div id="screen-landing" class="screen active">
+  <div class="landing">
+    <div class="hero">
+      <canvas id="heroGlobe" width="170" height="170"></canvas>
+      <h1>Glob<span>le</span></h1>
+      <p>A mystery country is hiding somewhere on Earth.<br>Guess any country and the colours tell you if you're getting hotter or colder.</p>
+    </div>
+
+    <div class="section-label">Game mode</div>
+    <div class="mode-cards">
+      <button class="mode-card" id="modeDaily" onclick="setMode('daily')">
+        <div class="ico">📅</div>
+        <h3>Daily</h3>
+        <p>One country per day. The same one for everyone.</p>
+        <div class="status" id="dailyStatus"></div>
+      </button>
+      <button class="mode-card" id="modeUnlimited" onclick="setMode('unlimited')">
+        <div class="ico">♾️</div>
+        <h3>Unlimited</h3>
+        <p>A new random country every round. Play as much as you like.</p>
+        <div class="status" id="unlimitedStatus"></div>
+      </button>
+    </div>
+
+    <div class="section-label">Hints</div>
+    <div class="seg">
+      <button id="hintsOff" onclick="setHints(false)">🚫 No hints</button>
+      <button id="hintsOn" onclick="setHints(true)">💡 With hints</button>
+    </div>
+    <div class="seg-note" id="hintsNote"></div>
+
+    <div style="margin-top:18px">
+      <button class="btn" id="playBtn" onclick="play()">Play</button>
+      <p id="landingNote"></p>
+      <button class="btn secondary small" style="margin-top:6px" onclick="openStats()">📊 Your stats</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen">
+  <div class="topbar">
+    <div class="brand" onclick="goHome()">🌍 Glob<span>le</span></div>
+    <div class="spacer"></div>
+    <button class="icon-btn" onclick="openStats()" aria-label="Stats">📊</button>
+  </div>
+
+  <div class="game-wrap">
+    <div class="globe-col">
+      <div class="mode-line" id="modeLine"></div>
+      <div class="globe-box" id="globeBox">
+        <canvas id="globe"></canvas>
+        <div class="zoom-ctl">
+          <button onclick="zoomBy(1.6)" aria-label="Zoom in">+</button>
+          <button onclick="zoomBy(1/1.6)" aria-label="Zoom out">−</button>
+        </div>
+        <div class="globe-tip" id="globeTip">Drag to spin · tap a country or dot to guess</div>
+      </div>
+      <div class="legend">
+        <div class="legend-bar" id="legendBar"></div>
+        <div class="legend-labels"><span>🧊 Far away</span><span>Bordering 🔥</span></div>
+      </div>
+    </div>
+
+    <div class="side-col">
+      <div class="card guess-box" id="guessCard">
+        <div class="toast" id="toast"></div>
+        <div class="guess-row">
+          <input id="guessInput" type="text" placeholder="Type a country…" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+          <button class="btn" onclick="enterGuess()">Guess</button>
+        </div>
+        <div class="suggest" id="suggest"></div>
+      </div>
+
+      <div class="card status-card" id="statusCard" style="display:none"></div>
+
+      <div class="card hints" id="hintsCard" style="display:none"></div>
+
+      <div class="card list-card">
+        <h3><span>Guesses <span class="muted" id="gCount"></span></span><span class="closest-pill" id="closestPill"></span></h3>
+        <div class="glist" id="guessList"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn secondary small" id="giveUpBtn" onclick="openModal('giveUpModal')">🏳️ Give up</button>
+        <button class="btn secondary small" onclick="goHome()">🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAGNIFIER -->
+<div class="modal-back" id="magModal" onclick="if(event.target===this) closeModal('magModal')">
+  <div class="modal">
+    <canvas id="magCanvas"></canvas>
+    <h2 id="magName">-</h2>
+    <p class="sub" id="magSub"></p>
+    <div class="btn-row">
+      <button class="btn secondary" onclick="closeModal('magModal')">Close</button>
+      <button class="btn" id="magGuessBtn">Guess</button>
+    </div>
+  </div>
+</div>
+
+<!-- END OF ROUND -->
+<div class="modal-back" id="endModal" onclick="if(event.target===this) closeModal('endModal')">
+  <div class="modal" id="endBody"></div>
+</div>
+
+<!-- STATS -->
+<div class="modal-back" id="statsModal" onclick="if(event.target===this) closeModal('statsModal')">
+  <div class="modal">
+    <h2>📊 Your stats</h2>
+    <p class="sub">Saved on this device</p>
+    <div class="tabs">
+      <button id="tabDaily" onclick="renderStats('daily')">📅 Daily</button>
+      <button id="tabUnlimited" onclick="renderStats('unlimited')">♾️ Unlimited</button>
+    </div>
+    <div id="statsBody"></div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn secondary small" onclick="resetStats()">Reset</button>
+      <button class="btn small" onclick="closeModal('statsModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- GIVE UP -->
+<div class="modal-back" id="giveUpModal" onclick="if(event.target===this) closeModal('giveUpModal')">
+  <div class="modal">
+    <h2>🏳️ Give up?</h2>
+    <p class="sub">The mystery country will be revealed. This counts as a loss and resets your streak.</p>
+    <div class="btn-row">
+      <button class="btn secondary" onclick="closeModal('giveUpModal')">Keep going</button>
+      <button class="btn" onclick="closeModal('giveUpModal'); finish(false)">Reveal it</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="fxCanvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script src="globle-data.js"></script>
+<script>
+// ================= DATA =================
+const DATA = window.GLOBLE_DATA;
+const C = DATA.countries;
+const N = C.length;
+const idxOf = {};
+C.forEach((c, i) => idxOf[c.iso] = i);
+const FEATURES = topojson.feature(DATA.topo, DATA.topo.objects[Object.keys(DATA.topo.objects)[0]]).features;
+// tiny countries ship with a detailed outline of their own (simplifying the world map would flatten them)
+FEATURES.forEach(f => { if (DATA.extra && DATA.extra[f.properties.iso]) f.geometry = DATA.extra[f.properties.iso]; });
+for (let i = FEATURES.length - 1; i >= 0; i--) if (!FEATURES[i].geometry) FEATURES.splice(i, 1);
+// d3 draws on a sphere, so a ring wound the "wrong" way means "everything except this shape".
+// Flip any polygon that claims more than half the planet.
+FEATURES.forEach(f => {
+  const g = f.geometry;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+  polys.forEach(p => {
+    if (d3.geoArea({ type: "Polygon", coordinates: p }) > 2 * Math.PI) p.forEach(ring => ring.reverse());
+  });
+});
+// draw microstates last so they sit on top of any neighbour that surrounds them
+FEATURES.sort((a, b) => (a.properties.kind === "c" && C[idxOf[a.properties.iso]].tiny ? 1 : 0) - (b.properties.kind === "c" && C[idxOf[b.properties.iso]].tiny ? 1 : 0));
+const featByIso = {};
+FEATURES.forEach(f => { if (f.properties.kind === "c") featByIso[f.properties.iso] = f; });
+
+// largest single polygon of each country — used for framing the camera and the magnifier
+const mainPoly = {};
+for (const iso in featByIso) {
+  const g = featByIso[iso].geometry;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+  let best = null, ba = -1;
+  polys.forEach(p => { const a = d3.geoArea({ type: "Polygon", coordinates: p }); if (a > ba) { ba = a; best = p; } });
+  mainPoly[iso] = { type: "Feature", geometry: { type: "Polygon", coordinates: best } };
+}
+
+function distKm(isoA, isoB) {
+  let a = idxOf[isoA], b = idxOf[isoB];
+  if (a === b) return 0;
+  if (a > b) [a, b] = [b, a];
+  return DATA.dist[a * N - a * (a + 1) / 2 + (b - a - 1)];
+}
+const nameOf = iso => C[idxOf[iso]].name;
+const fmtKm = d => d === 0 ? "Bordering" : d.toLocaleString("en-AU") + " km";
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+const $ = id => document.getElementById(id);
+
+// ================= COLOURS =================
+const HEAT_STOPS = [
+  [0, "#7a0019"], [400, "#b2182b"], [1000, "#d6452a"], [2000, "#ef7b3c"],
+  [3500, "#f9a95a"], [6000, "#fcca6e"], [10000, "#fde49a"], [15000, "#fef3c4"]
+];
+function heat(d) {
+  if (d <= 0) return HEAT_STOPS[0][1];
+  for (let i = 1; i < HEAT_STOPS.length; i++) {
+    const [d1, c1] = HEAT_STOPS[i];
+    if (d <= d1) {
+      const [d0, c0] = HEAT_STOPS[i - 1];
+      return d3.interpolateLab(c0, c1)((d - d0) / (d1 - d0));
+    }
+  }
+  return HEAT_STOPS[HEAT_STOPS.length - 1][1];
+}
+const GREEN = "#2f9e58", LAND = "#c9cdd3", LAND_OTHER = "#dde0e4";
+$("legendBar").style.background = "linear-gradient(90deg," +
+  [15000, 10000, 6000, 3500, 2000, 1000, 400, 0].map(heat).join(",") + ")";
+
+// ================= SEARCH =================
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+  .replace(/&/g, "and").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+const SEARCH = C.map(c => [{ k: norm(c.name), label: c.name, isName: true }]
+  .concat(c.alias.map(a => ({ k: norm(a), label: a, isName: false }))));
+
+function suggest(q) {
+  const n = norm(q);
+  if (!n) return [];
+  const res = [];
+  C.forEach((c, i) => {
+    let best = null;
+    SEARCH[i].forEach(s => {
+      let score = s.k === n ? 0 : s.k.startsWith(n) ? 1 : (" " + s.k).includes(" " + n) ? 2 : (n.length >= 3 && s.k.includes(n)) ? 3 : -1;
+      if (score < 0) return;
+      if (!s.isName) score += 0.5;
+      if (!best || score < best.score) best = { score, alias: s.isName ? null : s.label };
+    });
+    if (best) res.push({ i, score: best.score, alias: best.alias });
+  });
+  res.sort((a, b) => a.score - b.score || C[a.i].name.localeCompare(C[b.i].name));
+  return res.slice(0, 6);
+}
+
+// ================= STORAGE =================
+function load(key) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+function localDateStr(d = new Date()) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function dayNumber(str) { const [y, m, d] = str.split("-").map(Number); return Math.round(Date.UTC(y, m - 1, d) / 86400000); }
+function prettyDate(str) { const [y, m, d] = str.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }); }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// Every country appears once per 195-day cycle, in a shuffled order that is the same on every device.
+function dailyAnswer(dateStr) {
+  const day = dayNumber(dateStr) - dayNumber("2026-01-01");
+  const cycle = Math.floor(day / N), pos = ((day % N) + N) % N;
+  const order = C.map(c => c.iso).sort();
+  const r = mulberry32(91357 + cycle * 7919);
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  return order[pos];
+}
+
+// ================= PREFS & LANDING =================
+let pref = Object.assign({ mode: "daily", hints: false }, load("globle.prefs") || {});
+let game = null;
+
+function setMode(m) { pref.mode = m; store("globle.prefs", pref); renderLanding(); }
+function setHints(h) { pref.hints = h; store("globle.prefs", pref); renderLanding(); }
+
+function inProgressFor(mode) {
+  if (mode === "daily") { const g = load("globle.daily." + localDateStr()); return g; }
+  return load("globle.unlimited");
+}
+
+function renderLanding() {
+  $("modeDaily").classList.toggle("sel", pref.mode === "daily");
+  $("modeUnlimited").classList.toggle("sel", pref.mode === "unlimited");
+  $("hintsOff").classList.toggle("sel", !pref.hints);
+  $("hintsOn").classList.toggle("sel", pref.hints);
+  $("hintsNote").textContent = pref.hints
+    ? "Unlock up to 3 hints as you go: continent, compass direction and first letter."
+    : "Pure mode: just you, the globe and the colours.";
+
+  const d = inProgressFor("daily");
+  $("dailyStatus").textContent = !d ? "Not played yet today"
+    : d.won ? `✅ Solved in ${d.guesses.length}` : d.gaveUp ? "🏳️ Revealed" : `⏳ ${d.guesses.length} guess${d.guesses.length === 1 ? "" : "es"} so far`;
+  const u = inProgressFor("unlimited");
+  $("unlimitedStatus").textContent = u && !u.done && u.guesses.length ? `⏳ Round in progress (${u.guesses.length})` : "";
+
+  const g = inProgressFor(pref.mode);
+  let note = "", label = "Play";
+  if (pref.mode === "daily" && g) {
+    if (g.done) { label = "See today's result"; }
+    else if (g.guesses.length) { label = "Resume today's game"; }
+    if (!g.done && g.guesses.length && g.hints !== pref.hints) note = `Today's game was started ${g.hints ? "with" : "without"} hints, so it stays that way.`;
+  } else if (pref.mode === "unlimited" && g && !g.done && g.guesses.length) {
+    label = "Resume round";
+    if (g.hints !== pref.hints) note = `This round was started ${g.hints ? "with" : "without"} hints, so it stays that way.`;
+  }
+  $("playBtn").textContent = label;
+  $("landingNote").textContent = note;
+}
+
+function newGame(mode, hints) {
+  let answer;
+  if (mode === "daily") answer = dailyAnswer(localDateStr());
+  else { const prev = load("globle.unlimited"); do { answer = C[Math.floor(Math.random() * N)].iso; } while (prev && prev.answer === answer); }
+  return { mode, hints, answer, date: localDateStr(), guesses: [], revealed: [false, false, false], done: false, won: false, gaveUp: false, recorded: false };
+}
+function saveGame() { if (!game) return; store(game.mode === "daily" ? "globle.daily." + game.date : "globle.unlimited", game); }
+
+function play() {
+  let g = inProgressFor(pref.mode);
+  if (pref.mode === "daily") {
+    if (!g) g = newGame("daily", pref.hints);
+    else if (!g.done && g.guesses.length === 0) g.hints = pref.hints;
+  } else {
+    if (!g || g.done) g = newGame("unlimited", pref.hints);
+    else if (g.guesses.length === 0) g.hints = pref.hints;
+  }
+  game = g;
+  saveGame();
+  showGame();
+}
+
+function goHome() {
+  stopHero(false);
+  closeAllModals();
+  showScreen("screen-landing");
+  renderLanding();
+  startHero();
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  window.scrollTo(0, 0);
+}
+
+// ================= GAME SCREEN =================
+let latestIso = null;
+
+function showGame() {
+  stopHero();
+  showScreen("screen-game");
+  resizeGlobe();
+  latestIso = null;
+  const target = game.done ? game.answer : closestGuess() || null;
+  if (target) { center = C[idxOf[target]].lp.slice(); zoom = game.done ? fitZoom(game.answer) : 1; }
+  else { center = [Math.random() * 360 - 180, 15]; zoom = 1; }
+  requestDraw();
+  renderSide();
+  $("guessInput").value = "";
+  hideSuggest();
+  if (game.done) setTimeout(() => openEndModal(), 400);
+}
+
+function closestGuess() {
+  let best = null, bd = Infinity;
+  game.guesses.forEach(iso => { const d = distKm(iso, game.answer); if (d < bd) { bd = d; best = iso; } });
+  return best;
+}
+
+function renderSide() {
+  $("modeLine").innerHTML =
+    `<span class="chip">${game.mode === "daily" ? "📅 Daily · " + esc(prettyDate(game.date)) : "♾️ Unlimited"}</span>` +
+    `<span class="chip">${game.hints ? "💡 Hints on" : "🚫 No hints"}</span>`;
+
+  $("guessCard").style.display = game.done ? "none" : "block";
+  $("giveUpBtn").style.display = game.done ? "none" : "block";
+
+  // status card after the round
+  const sc = $("statusCard");
+  if (game.done) {
+    sc.style.display = "block";
+    sc.className = "card status-card " + (game.won ? "won" : "lost");
+    sc.innerHTML = (game.won
+      ? `<div class="small muted">🎉 You found it in ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}</div>`
+      : `<div class="small muted">🏳️ The mystery country was</div>`) +
+      `<div class="big-name">${esc(nameOf(game.answer))}</div>` +
+      `<div class="btn-row" style="margin-top:10px">` +
+      `<button class="btn secondary small" onclick="openEndModal()">Results</button>` +
+      (game.mode === "unlimited" ? `<button class="btn small" onclick="nextRound()">Next country ▶</button>` : `<button class="btn small" onclick="goHome()">Menu</button>`) +
+      `</div>`;
+  } else sc.style.display = "none";
+
+  renderHints();
+
+  // guess list
+  const list = game.guesses.map(iso => ({ iso, d: distKm(iso, game.answer) }))
+    .sort((a, b) => a.d - b.d);
+  $("gCount").textContent = game.guesses.length ? `(${game.guesses.length})` : "";
+  const best = list.find(x => x.iso !== game.answer);
+  $("closestPill").textContent = best && !game.won ? `Closest: ${fmtKm(best.d)}` : "";
+  $("guessList").innerHTML = list.length ? list.map((x, k) => {
+    const isAns = x.iso === game.answer;
+    const col = isAns ? GREEN : heat(x.d);
+    return `<button class="grow ${x.iso === latestIso ? "latest" : ""}" onclick="focusCountry('${x.iso}')">
+      <span class="rank">${k + 1}</span><span class="sw" style="background:${col}"></span>
+      <span class="nm">${esc(nameOf(x.iso))}</span><span class="km">${isAns ? "🎯 Found" : fmtKm(x.d)}</span></button>`;
+  }).join("") : `<div class="empty">No guesses yet. Try any country to get your first clue.</div>`;
+}
+
+function focusCountry(iso) { flyTo(C[idxOf[iso]].lp, Math.max(zoom, C[idxOf[iso]].tiny ? 2.5 : zoom)); }
+
+// ================= HINTS =================
+const HINT_AT = [3, 6, 10];
+const DIRS = [["North", "⬆️"], ["North-East", "↗️"], ["East", "➡️"], ["South-East", "↘️"], ["South", "⬇️"], ["South-West", "↙️"], ["West", "⬅️"], ["North-West", "↖️"]];
+function bearing(a, b) {
+  const r = Math.PI / 180, l1 = a[0] * r, p1 = a[1] * r, l2 = b[0] * r, p2 = b[1] * r;
+  const y = Math.sin(l2 - l1) * Math.cos(p2);
+  const x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(l2 - l1);
+  return (Math.atan2(y, x) / r + 360) % 360;
+}
+function hintValue(k) {
+  const ans = C[idxOf[game.answer]];
+  if (k === 0) return `It's in <span class="val">${esc(ans.cont)}</span>`;
+  if (k === 1) {
+    const from = game.guesses.filter(g => g !== game.answer).sort((a, b) => distKm(a, game.answer) - distKm(b, game.answer))[0];
+    if (!from) return "Make a guess first";
+    const [dir, arrow] = DIRS[Math.round(bearing(C[idxOf[from]].lp, ans.lp) / 45) % 8];
+    return `From <b style="display:inline;text-transform:none;font-size:inherit;color:inherit;letter-spacing:0">${esc(nameOf(from))}</b> (your closest), head <span class="val">${arrow} ${dir}</span>`;
+  }
+  return `It starts with <span class="val">"${esc(ans.name[0])}"</span>`;
+}
+function renderHints() {
+  const box = $("hintsCard");
+  if (!game.hints) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  const names = [["🌎", "Continent"], ["🧭", "Direction"], ["🔤", "First letter"]];
+  const n = game.guesses.length;
+  box.innerHTML = `<h3><span>💡 Hints</span><span class="closest-pill">${game.revealed.filter(Boolean).length}/3 used</span></h3>` +
+    names.map(([ico, title], k) => {
+      let body;
+      if (game.revealed[k] || game.done) body = `<b>${title}</b>${hintValue(k)}`;
+      else if (n >= HINT_AT[k]) body = `<b>${title}</b><button class="reveal-btn" onclick="revealHint(${k})">Reveal hint</button>`;
+      else body = `<b>${title}</b><span class="lock">🔒 Unlocks after ${HINT_AT[k]} guesses (${HINT_AT[k] - n} to go)</span>`;
+      return `<div class="hint"><div class="ico">${ico}</div><div class="body">${body}</div></div>`;
+    }).join("");
+}
+function revealHint(k) { game.revealed[k] = true; saveGame(); renderHints(); }
+
+// ================= GUESSING =================
+let sugItems = [], sugHl = -1;
+const input = $("guessInput");
+input.addEventListener("input", () => { sugHl = -1; showSuggest(); });
+input.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown" && sugItems.length) { sugHl = (sugHl + 1) % sugItems.length; paintSuggest(); e.preventDefault(); }
+  else if (e.key === "ArrowUp" && sugItems.length) { sugHl = (sugHl - 1 + sugItems.length) % sugItems.length; paintSuggest(); e.preventDefault(); }
+  else if (e.key === "Enter") { e.preventDefault(); enterGuess(); }
+  else if (e.key === "Escape") hideSuggest();
+});
+document.addEventListener("pointerdown", e => { if (!$("guessCard").contains(e.target)) hideSuggest(); });
+
+function showSuggest() { sugItems = suggest(input.value); paintSuggest(); }
+function paintSuggest() {
+  const box = $("suggest");
+  if (!sugItems.length) { box.classList.remove("show"); return; }
+  box.innerHTML = sugItems.map((s, k) => {
+    const c = C[s.i], done = game && game.guesses.includes(c.iso);
+    return `<button class="${k === sugHl ? "hl" : ""}" onpointerdown="event.preventDefault()" onclick="pickSuggestion(${k})">
+      <span>${esc(c.name)}${s.alias ? ` <span class="alias">(${esc(s.alias)})</span>` : ""}</span>${done ? `<span class="done">guessed</span>` : ""}</button>`;
+  }).join("");
+  box.classList.add("show");
+}
+function hideSuggest() { $("suggest").classList.remove("show"); sugItems = []; sugHl = -1; }
+function pickSuggestion(k) { const s = sugItems[k]; if (!s) return; input.value = ""; hideSuggest(); submitGuess(C[s.i].iso); }
+function enterGuess() {
+  if (!input.value.trim()) return;
+  const items = sugItems.length ? sugItems : suggest(input.value);
+  const s = sugHl >= 0 ? items[sugHl] : items[0];
+  if (!s) { toast("🤔 Not a country I know. Check the spelling"); return; }
+  input.value = "";
+  hideSuggest();
+  submitGuess(C[s.i].iso);
+}
+
+function submitGuess(iso) {
+  if (!game || game.done) return;
+  const c = C[idxOf[iso]];
+  if (game.guesses.includes(iso)) { toast(`You already guessed ${c.name}`); focusCountry(iso); return; }
+  const prevBest = game.guesses.length ? distKm(closestGuess(), game.answer) : null;
+  game.guesses.push(iso);
+  latestIso = iso;
+  if (iso === game.answer) { finish(true); return; }
+  const d = distKm(iso, game.answer);
+  if (d === 0) toast(`🔥🔥 ${c.name} is bordering it!`);
+  else if (prevBest === null) toast(`${c.name}: ${fmtKm(d)} away`);
+  else if (d < prevBest) toast(`🔥 Warmer! New closest: ${fmtKm(d)}`);
+  else toast(`🧊 Colder: ${fmtKm(d)}`);
+  saveGame();
+  renderSide();
+  flyTo(c.lp, c.tiny ? Math.max(zoom, 2.5) : zoom);
+}
+
+function finish(won) {
+  if (game.done) return;
+  game.done = true; game.won = won; game.gaveUp = !won;
+  recordStats();
+  saveGame();
+  renderSide();
+  hideSuggest();
+  flyTo(C[idxOf[game.answer]].lp, fitZoom(game.answer), 1400);
+  pulseUntil = performance.now() + 6000;
+  if (won) {
+    setTimeout(() => celebrate(), 900);
+    setTimeout(() => openEndModal(), 2400);
+  } else setTimeout(() => openEndModal(), 1500);
+}
+
+function nextRound() {
+  closeAllModals();
+  game = newGame("unlimited", game.hints);
+  saveGame();
+  showGame();
+}
+
+// ================= STATS =================
+const BUCKETS = [[1, 3, "1–3"], [4, 6, "4–6"], [7, 10, "7–10"], [11, 15, "11–15"], [16, 25, "16–25"], [26, 1e9, "26+"]];
+function blankStats() { return { played: 0, wins: 0, total: 0, best: null, cur: 0, max: 0, lastWin: null, noHint: 0, dist: [0, 0, 0, 0, 0, 0] }; }
+function getStats() { const s = load("globle.stats.v1") || {}; return { daily: Object.assign(blankStats(), s.daily), unlimited: Object.assign(blankStats(), s.unlimited) }; }
+function yesterdayOf(str) { const [y, m, d] = str.split("-").map(Number); return localDateStr(new Date(y, m - 1, d - 1)); }
+
+function recordStats() {
+  if (game.recorded) return;
+  game.recorded = true;
+  const all = getStats(), s = all[game.mode];
+  s.played++;
+  if (game.won) {
+    const n = game.guesses.length;
+    s.wins++; s.total += n;
+    s.best = s.best === null ? n : Math.min(s.best, n);
+    s.dist[BUCKETS.findIndex(b => n >= b[0] && n <= b[1])]++;
+    if (!game.revealed.some(Boolean)) s.noHint++;
+    if (game.mode === "daily") s.cur = s.lastWin === yesterdayOf(game.date) ? s.cur + 1 : 1;
+    else s.cur++;
+    s.lastWin = game.mode === "daily" ? game.date : null;
+  } else s.cur = 0;
+  s.max = Math.max(s.max, s.cur);
+  store("globle.stats.v1", all);
+}
+function currentStreak(mode, s) {
+  if (mode !== "daily") return s.cur;
+  const today = localDateStr();
+  return (s.lastWin === today || s.lastWin === yesterdayOf(today)) ? s.cur : 0;
+}
+
+let statsTab = "daily";
+function openStats() { renderStats(game ? game.mode : pref.mode); openModal("statsModal"); }
+function renderStats(mode) {
+  statsTab = mode;
+  $("tabDaily").classList.toggle("sel", mode === "daily");
+  $("tabUnlimited").classList.toggle("sel", mode === "unlimited");
+  const s = getStats()[mode];
+  const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+  const avg = s.wins ? (s.total / s.wins).toFixed(1) : "–";
+  const maxB = Math.max(1, ...s.dist);
+  $("statsBody").innerHTML = `
+    <div class="stat-row">
+      <div><div class="n">${s.played}</div><div class="l">Played</div></div>
+      <div><div class="n">${pct}%</div><div class="l">Win rate</div></div>
+      <div><div class="n">${currentStreak(mode, s)}</div><div class="l">Current streak</div></div>
+      <div><div class="n">${s.max}</div><div class="l">Best streak</div></div>
+    </div>
+    <div class="stat-row" style="grid-template-columns:repeat(3,1fr);margin-top:0">
+      <div><div class="n">${avg}</div><div class="l">Avg guesses</div></div>
+      <div><div class="n">${s.best ?? "–"}</div><div class="l">Fewest guesses</div></div>
+      <div><div class="n">${s.noHint}</div><div class="l">Wins with no hints</div></div>
+    </div>
+    <div class="section-label" style="margin-top:4px">Guesses needed</div>
+    ${BUCKETS.map((b, k) => `<div class="dist-row"><span class="lb">${b[2]}</span>
+      <span class="bar ${s.dist[k] ? "" : "zero"}" style="width:${Math.max(8, s.dist[k] / maxB * 100)}%">${s.dist[k]}</span></div>`).join("")}
+  `;
+}
+function resetStats() {
+  if (!confirm("Reset all your Globle stats on this device?")) return;
+  store("globle.stats.v1", {});
+  renderStats(statsTab);
+}
+
+// ================= END MODAL =================
+let countdownTimer = null;
+function shareText() {
+  const sq = d => d === 0 ? "🟥" : d < 1500 ? "🟥" : d < 5000 ? "🟧" : "🟨";
+  const path = game.guesses.map(iso => iso === game.answer ? "🟩" : sq(distKm(iso, game.answer))).join("");
+  const head = game.mode === "daily" ? `🌍 Globle Daily · ${prettyDate(game.date)}` : "🌍 Globle Unlimited";
+  const used = game.revealed.filter(Boolean).length;
+  const line = game.won ? `Found it in ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}${game.hints ? ` · ${used} hint${used === 1 ? "" : "s"}` : " · no hints"}` : `Gave up after ${game.guesses.length} guesses`;
+  return `${head}\n${line}\n${path}`;
+}
+function share() {
+  const text = shareText();
+  const done = () => toastIn("shareMsg", "Copied! Paste it to your friends 📋");
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(fallback);
+  else fallback();
+  function fallback() {
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) {} ta.remove();
+  }
+}
+function toastIn(id, msg) { const el = $(id); if (el) { el.textContent = msg; } }
+
+function openEndModal() {
+  const s = getStats()[game.mode];
+  const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+  const ans = C[idxOf[game.answer]];
+  const used = game.revealed.filter(Boolean).length;
+  const top = game.won
+    ? `<div class="win-burst">🎉</div><h2>You found it!</h2>
+       <div class="big-name">${esc(ans.name)}</div>
+       <p class="sub" style="margin-top:6px">${esc(ans.cont)} · ${game.guesses.length} guess${game.guesses.length === 1 ? "" : "es"}${game.hints ? ` · ${used} hint${used === 1 ? "" : "s"} used` : ""}</p>`
+    : `<div class="win-burst" style="animation:none">🗺️</div><h2>The answer was</h2>
+       <div class="big-name">${esc(ans.name)}</div>
+       <p class="sub" style="margin-top:6px">${esc(ans.cont)} · ${game.guesses.length} guesses made</p>`;
+  const next = game.mode === "daily"
+    ? `<p class="small muted" style="text-align:center;margin:4px 0 2px">Next daily country in</p><div class="countdown" id="countdown">--:--:--</div>
+       <div class="btn-row" style="margin-top:12px"><button class="btn secondary" onclick="closeModal('endModal')">View map</button>
+       <button class="btn" onclick="pref.mode='unlimited';store('globle.prefs',pref);closeAllModals();play()">Try Unlimited</button></div>`
+    : `<div class="btn-row" style="margin-top:4px"><button class="btn secondary" onclick="closeModal('endModal')">View map</button>
+       <button class="btn" onclick="nextRound()">Next country ▶</button></div>`;
+  $("endBody").innerHTML = `${top}
+    <div class="stat-row">
+      <div><div class="n">${s.played}</div><div class="l">Played</div></div>
+      <div><div class="n">${pct}%</div><div class="l">Win rate</div></div>
+      <div><div class="n">${currentStreak(game.mode, s)}</div><div class="l">Streak</div></div>
+      <div><div class="n">${s.best ?? "–"}</div><div class="l">Best</div></div>
+    </div>
+    <button class="btn green" onclick="share()">📋 Share result</button>
+    <p class="small muted" id="shareMsg" style="text-align:center;min-height:1em;margin:6px 0"></p>
+    ${next}
+    <button class="btn secondary small" style="margin-top:8px" onclick="goHome()">🏠 Menu</button>`;
+  openModal("endModal");
+  clearInterval(countdownTimer);
+  if (game.mode === "daily") {
+    const tick = () => {
+      const now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const s2 = Math.max(0, Math.floor((mid - now) / 1000));
+      const el = $("countdown"); if (!el) return clearInterval(countdownTimer);
+      el.textContent = [Math.floor(s2 / 3600), Math.floor(s2 / 60) % 60, s2 % 60].map(v => String(v).padStart(2, "0")).join(":");
+    };
+    tick(); countdownTimer = setInterval(tick, 1000);
+  }
+}
+
+// ================= MODALS & TOAST =================
+function openModal(id) { $(id).classList.add("show"); }
+function closeModal(id) { $(id).classList.remove("show"); }
+function closeAllModals() { document.querySelectorAll(".modal-back").forEach(m => m.classList.remove("show")); }
+let toastTimer = null;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// ================= GLOBE =================
+const canvas = $("globe"), ctx = canvas.getContext("2d");
+let size = 400, dpr = 1, center = [20, 15], zoom = 1;
+const proj = d3.geoOrthographic().clipAngle(90).precision(0.7);
+const gpath = d3.geoPath(proj, ctx);
+const GRAT = d3.geoGraticule10();
+const MIN_Z = 1, MAX_Z = 14;
+let pulseUntil = 0;
+
+function baseR() { return size / 2 - 8; }
+function setProj() { proj.scale(baseR() * zoom).translate([size / 2, size / 2]).rotate([-center[0], -center[1], 0]); }
+function resizeGlobe() {
+  const box = $("globeBox");
+  size = Math.max(200, Math.round(box.clientWidth));
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  requestDraw();
+}
+window.addEventListener("resize", () => { if ($("screen-game").classList.contains("active")) resizeGlobe(); fxResize(); });
+
+function visible(lp) { return d3.geoDistance(lp, center) < Math.PI / 2 - 0.03; }
+function guessedSet() { return game ? new Set(game.guesses) : new Set(); }
+
+function colourFor(iso, guessed) {
+  if (game && game.done && iso === game.answer) return GREEN;
+  if (guessed.has(iso)) return heat(distKm(iso, game.answer));
+  return null;
+}
+
+function draw(now = performance.now()) {
+  setProj();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+  const R = baseR() * zoom, cx = size / 2, cy = size / 2;
+
+  // soft shadow + ocean
+  ctx.save();
+  ctx.shadowColor = "rgba(30,60,90,0.25)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+  const og = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.05, cx, cy, R);
+  og.addColorStop(0, "#f1f9ff"); og.addColorStop(1, "#a8d0ea");
+  ctx.beginPath(); gpath({ type: "Sphere" }); ctx.fillStyle = og; ctx.fill();
+  ctx.restore();
+  ctx.beginPath(); gpath(GRAT); ctx.strokeStyle = "rgba(50,100,140,0.12)"; ctx.lineWidth = 0.7; ctx.stroke();
+
+  const guessed = guessedSet();
+  FEATURES.forEach(f => {
+    const iso = f.properties.iso;
+    const col = f.properties.kind === "c" ? colourFor(iso, guessed) : null;
+    ctx.beginPath(); gpath(f);
+    ctx.fillStyle = col || (f.properties.kind === "c" ? LAND : LAND_OTHER);
+    ctx.fill();
+    ctx.strokeStyle = col ? "rgba(60,30,20,0.45)" : "rgba(255,255,255,0.95)";
+    ctx.lineWidth = col ? 0.8 : 0.6;
+    ctx.stroke();
+  });
+
+  // dots for tiny countries
+  C.forEach(c => {
+    if (!c.tiny || !visible(c.lp)) return;
+    const p = proj(c.lp); if (!p) return;
+    const col = colourFor(c.iso, guessed);
+    const r = Math.min(9, 4.2 + zoom * 0.25);
+    ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
+    ctx.fillStyle = col || "#ffffff"; ctx.fill();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = col ? "rgba(60,30,20,0.6)" : "#5b6474"; ctx.stroke();
+  });
+
+  // pulsing rings on the answer at the end of a round
+  if (game && game.done && now < pulseUntil + 100000) {
+    const lp = C[idxOf[game.answer]].lp;
+    if (visible(lp)) {
+      const p = proj(lp);
+      const active = now < pulseUntil;
+      for (let k = 0; k < (active ? 3 : 1); k++) {
+        const t = active ? ((now / 1400 + k / 3) % 1) : 0.35;
+        ctx.beginPath(); ctx.arc(p[0], p[1], 10 + t * 42, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(47,158,88,${(1 - t) * 0.9})`; ctx.lineWidth = 3; ctx.stroke();
+      }
+    }
+  }
+
+  // rim
+  ctx.beginPath(); gpath({ type: "Sphere" }); ctx.strokeStyle = "rgba(40,80,110,0.35)"; ctx.lineWidth = 1.2; ctx.stroke();
+}
+
+// ----- animation loop -----
+let looping = false, flight = null, spinV = null;
+function requestDraw() { if (looping) return; looping = true; requestAnimationFrame(tick); }
+function tick(now) {
+  let more = false;
+  if (flight) { if (flight(now)) more = true; else flight = null; }
+  if (spinV) {
+    center[0] -= spinV[0]; center[1] = Math.max(-85, Math.min(85, center[1] + spinV[1]));
+    spinV[0] *= 0.93; spinV[1] *= 0.93;
+    if (Math.hypot(spinV[0], spinV[1]) < 0.02) spinV = null; else more = true;
+  }
+  if (game && game.done && now < pulseUntil) more = true;
+  if ($("screen-game").classList.contains("active")) draw(now);
+  looping = false;
+  if (more) requestDraw();
+}
+function flyTo(lp, z = zoom, dur = 900) {
+  const interp = d3.geoInterpolate(center.slice(), lp);
+  const z0 = zoom, t0 = performance.now();
+  spinV = null;
+  flight = now => {
+    const t = Math.min(1, (now - t0) / dur), e = d3.easeCubicInOut(t);
+    center = interp(e); zoom = z0 + (z - z0) * e;
+    return t < 1;
+  };
+  requestDraw();
+}
+function zoomBy(f) { flyTo(center.slice(), Math.max(MIN_Z, Math.min(MAX_Z, zoom * f)), 350); }
+
+function fitZoom(iso) {
+  const lp = C[idxOf[iso]].lp;
+  const p = d3.geoOrthographic().clipAngle(90).rotate([-lp[0], -lp[1]]).fitExtent([[0, 0], [size, size]], mainPoly[iso]);
+  return Math.max(MIN_Z, Math.min(5, p.scale() * 0.45 / baseR()));
+}
+
+// ----- pointer input: drag to spin, pinch/wheel to zoom, tap to inspect -----
+const pointers = new Map();
+let drag = null, pinch = null;
+canvas.addEventListener("pointerdown", e => {
+  canvas.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  flight = null; spinV = null;
+  if (pointers.size === 1) drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now(), moved: 0, vx: 0, vy: 0, lt: performance.now() };
+  else if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), z: zoom }; drag = null;
+  }
+  e.preventDefault();
+});
+canvas.addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    zoom = Math.max(MIN_Z, Math.min(MAX_Z, pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d));
+    requestDraw(); return;
+  }
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  drag.moved = Math.max(drag.moved, Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy));
+  if (drag.moved > 5) canvas.classList.add("dragging");
+  const k = (180 / Math.PI) / (baseR() * zoom) * (size / canvas.getBoundingClientRect().width);
+  center[0] -= dx * k;
+  center[1] = Math.max(-85, Math.min(85, center[1] + dy * k));
+  const now = performance.now(), dt = Math.max(1, now - drag.lt);
+  drag.vx = dx * k * 16 / dt; drag.vy = dy * k * 16 / dt; drag.lt = now;
+  requestDraw();
+  e.preventDefault();
+});
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.delete(e.pointerId);
+  canvas.classList.remove("dragging");
+  if (pinch) { if (pointers.size < 2) pinch = null; drag = null; return; }
+  if (!drag) return;
+  if (drag.moved < 6 && performance.now() - drag.t < 500) {
+    const r = canvas.getBoundingClientRect();
+    handleTap((e.clientX - r.left) * size / r.width, (e.clientY - r.top) * size / r.height);
+  } else if (performance.now() - drag.lt < 80 && Math.hypot(drag.vx, drag.vy) > 0.15) {
+    spinV = [drag.vx, drag.vy]; requestDraw();
+  }
+  drag = null;
+}
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  zoom = Math.max(MIN_Z, Math.min(MAX_Z, zoom * Math.exp(-e.deltaY * 0.0015)));
+  requestDraw();
+}, { passive: false });
+canvas.addEventListener("contextmenu", e => e.preventDefault());
+
+function handleTap(x, y) {
+  setProj();
+  // tiny-country dots get first dibs, with a generous touch target
+  let best = null, bd = 18;
+  C.forEach(c => {
+    if (!c.tiny || !visible(c.lp)) return;
+    const p = proj(c.lp); const d = Math.hypot(p[0] - x, p[1] - y);
+    if (d < bd) { bd = d; best = c.iso; }
+  });
+  if (best) return openMag(best);
+  if (Math.hypot(x - size / 2, y - size / 2) > baseR() * zoom) return;
+  const ll = proj.invert([x, y]); if (!ll) return;
+  for (const f of FEATURES) {
+    if (d3.geoContains(f, ll)) {
+      if (f.properties.kind === "c") openMag(f.properties.iso);
+      else if (!game.done) toast(`${f.properties.name} isn't one of the 195 countries`);
+      return;
+    }
+  }
+}
+
+// ================= MAGNIFIER =================
+function openMag(iso) {
+  const c = C[idxOf[iso]];
+  const guessed = game.guesses.includes(iso);
+  $("magName").textContent = c.name;
+  let sub = c.cont;
+  if (game.done && iso === game.answer) sub += " · 🎯 the mystery country";
+  else if (guessed) sub += " · " + fmtKm(distKm(iso, game.answer)) + (distKm(iso, game.answer) ? " away" : "");
+  else if (c.tiny) sub += " · tiny country, magnified";
+  $("magSub").textContent = sub;
+  const btn = $("magGuessBtn");
+  if (game.done || guessed) { btn.style.display = "none"; }
+  else {
+    btn.style.display = "block";
+    btn.textContent = "Guess " + c.name;
+    btn.onclick = () => { closeModal("magModal"); submitGuess(iso); };
+  }
+  openModal("magModal");
+  requestAnimationFrame(() => drawMag(iso));
+}
+
+function drawMag(iso) {
+  const cv = $("magCanvas");
+  const s = Math.round(cv.clientWidth) || 300, r = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = s * r; cv.height = s * r;
+  const c2 = cv.getContext("2d");
+  c2.setTransform(r, 0, 0, r, 0, 0);
+  const lp = C[idxOf[iso]].lp;
+  const p = d3.geoOrthographic().clipAngle(90).rotate([-lp[0], -lp[1]]).precision(0.3);
+  // frame the main landmass; tiny places get a minimum frame so you can see their surroundings
+  let target = mainPoly[iso];
+  const b = d3.geoBounds(target);
+  const span = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
+  if (span < 0.5) {
+    const h = 0.25;
+    target = { type: "Feature", geometry: { type: "Polygon", coordinates: [[[lp[0] - h, lp[1] - h], [lp[0] - h, lp[1] + h], [lp[0] + h, lp[1] + h], [lp[0] + h, lp[1] - h], [lp[0] - h, lp[1] - h]]] } };
+  }
+  p.fitExtent([[s * 0.22, s * 0.22], [s * 0.78, s * 0.78]], target);
+  if (p.scale() < s * 0.48) { p.scale(s * 0.48).translate([s / 2, s / 2]); }
+  const pp = d3.geoPath(p, c2);
+  c2.clearRect(0, 0, s, s);
+  c2.fillStyle = "#cfe4f3"; c2.fillRect(0, 0, s, s);
+  c2.beginPath(); pp({ type: "Sphere" }); c2.fillStyle = "#bcdcf1"; c2.fill();
+  const guessed = guessedSet();
+  FEATURES.forEach(f => {
+    if (f.properties.iso === iso) return;
+    const col = f.properties.kind === "c" ? colourFor(f.properties.iso, guessed) : null;
+    c2.beginPath(); pp(f);
+    c2.fillStyle = col || (f.properties.kind === "c" ? LAND : LAND_OTHER); c2.fill();
+    c2.strokeStyle = "#ffffff"; c2.lineWidth = 1; c2.stroke();
+  });
+  const col = colourFor(iso, guessed) || "#4f97d6";
+  c2.beginPath(); pp(featByIso[iso]);
+  c2.fillStyle = col; c2.fill();
+  c2.strokeStyle = "#1d2433"; c2.lineWidth = 2; c2.stroke();
+  // marker ring so even the very smallest country is easy to spot
+  const pt = p(lp);
+  if (pt) {
+    c2.beginPath(); c2.arc(pt[0], pt[1], s * 0.2, 0, Math.PI * 2);
+    c2.setLineDash([6, 6]); c2.strokeStyle = "rgba(29,36,51,0.45)"; c2.lineWidth = 2; c2.stroke(); c2.setLineDash([]);
+  }
+}
+
+// ================= CELEBRATION =================
+const fxCanvas = $("fxCanvas"), fxCtx = fxCanvas.getContext("2d");
+let fxW = 0, fxH = 0, fxParts = [], fxRunning = false, fxLast = 0;
+function fxResize() {
+  const r = Math.min(window.devicePixelRatio || 1, 2);
+  fxW = window.innerWidth; fxH = window.innerHeight;
+  fxCanvas.width = fxW * r; fxCanvas.height = fxH * r; fxCtx.setTransform(r, 0, 0, r, 0, 0);
+}
+fxResize();
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function fxAdd(p) { p.life = 0; fxParts.push(p); if (!fxRunning) { fxRunning = true; fxLast = performance.now(); requestAnimationFrame(fxLoop); } }
+function fxLoop(now) {
+  const dt = Math.min(0.05, (now - fxLast) / 1000); fxLast = now;
+  fxCtx.clearRect(0, 0, fxW, fxH);
+  fxParts = fxParts.filter(p => {
+    p.life += dt;
+    if (p.life >= p.max) return false;
+    const k = Math.max(0, 1 - p.drag * dt); p.vx *= k; p.vy *= k;
+    p.vy += p.g * dt;
+    if (p.sway) p.x += Math.sin(p.life * p.swayF + p.phase) * p.sway * dt;
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.y > fxH + 40 && p.vy > 0) return false;
+    const t = p.life / p.max;
+    fxCtx.globalAlpha = t > 0.8 ? (1 - t) / 0.2 : 1;
+    fxCtx.fillStyle = p.color;
+    if (p.kind === "confetti") {
+      p.rot += p.vr * dt;
+      fxCtx.save(); fxCtx.translate(p.x, p.y); fxCtx.rotate(p.rot); fxCtx.scale(1, Math.cos(p.life * p.flipF + p.phase));
+      fxCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2); fxCtx.restore();
+    } else {
+      fxCtx.beginPath(); fxCtx.arc(p.x, p.y, p.size * (1 - t * 0.5), 0, Math.PI * 2); fxCtx.fill();
+    }
+    return true;
+  });
+  fxCtx.globalAlpha = 1;
+  if (fxParts.length) requestAnimationFrame(fxLoop); else { fxRunning = false; fxCtx.clearRect(0, 0, fxW, fxH); }
+}
+function celebrate() {
+  const palette = ["#e4572e", "#f9a95a", "#ffd23f", "#2f9e58", "#3fa7d6", "#7b5ea7", "#ff7aa2"];
+  const confetti = (x, y, vx, vy, g) => fxAdd({
+    kind: "confetti", x, y, vx, vy, g, drag: 1.8, rot: rand(0, 6), vr: rand(-8, 8),
+    sway: rand(10, 50), swayF: rand(2, 5), phase: rand(0, 6), flipF: rand(5, 12),
+    size: rand(8, 15), color: pick(palette), max: rand(4.5, 7)
+  });
+  for (let i = 0; i < 90; i++) {
+    const sp = rand(-0.35, 0.35);
+    confetti(0, fxH, Math.sin(0.75 + sp) * rand(500, 1100), -Math.cos(0.75 + sp) * rand(800, 1500), 450);
+    confetti(fxW, fxH, -Math.sin(0.75 + sp) * rand(500, 1100), -Math.cos(0.75 + sp) * rand(800, 1500), 450);
+  }
+  const end = performance.now() + 5000;
+  const rain = setInterval(() => {
+    if (performance.now() > end) return clearInterval(rain);
+    for (let i = 0; i < 4; i++) confetti(rand(0, fxW), -15, rand(-40, 40), rand(40, 160), 420);
+  }, 80);
+  [300, 900, 1600, 2400].forEach(d => setTimeout(() => {
+    const cx = rand(fxW * 0.15, fxW * 0.85), cy = rand(fxH * 0.1, fxH * 0.4), c1 = pick(palette), c2 = pick(palette);
+    for (let i = 0; i < 60; i++) {
+      const a = rand(0, Math.PI * 2), v = rand(90, 320);
+      fxAdd({ kind: "spark", x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: 170, drag: 1.3, max: rand(0.9, 1.6), size: rand(2.2, 3.8), color: i % 2 ? c1 : c2 });
+    }
+  }, d));
+}
+
+// ================= LANDING HERO GLOBE =================
+const hero = $("heroGlobe"), hctx = hero.getContext("2d");
+let heroOn = false, heroRot = -30;
+(function setupHero() {
+  const r = Math.min(window.devicePixelRatio || 1, 2);
+  hero.width = 170 * r; hero.height = 170 * r; hctx.setTransform(r, 0, 0, r, 0, 0);
+})();
+const heroProj = d3.geoOrthographic().clipAngle(90).scale(78).translate([85, 85]).precision(1.5);
+const heroPath = d3.geoPath(heroProj, hctx);
+// a few countries shown "hot" so the logo hints at how the game works
+const HERO_HOT = { BRA: 0, ARG: 0, BOL: 0, PER: 300, PRY: 0, COL: 1200, URY: 400, CHL: 600, VEN: 2200, ECU: 1600 };
+function heroFrame() {
+  if (!heroOn) return;
+  heroRot += 0.25;
+  heroProj.rotate([heroRot, -12]);
+  hctx.clearRect(0, 0, 170, 170);
+  const g = hctx.createRadialGradient(60, 55, 5, 85, 85, 78);
+  g.addColorStop(0, "#f1f9ff"); g.addColorStop(1, "#a8d0ea");
+  hctx.beginPath(); heroPath({ type: "Sphere" }); hctx.fillStyle = g; hctx.fill();
+  FEATURES.forEach(f => {
+    const iso = f.properties.iso;
+    hctx.beginPath(); heroPath(f);
+    hctx.fillStyle = iso === "BOL" ? GREEN : iso in HERO_HOT ? heat(HERO_HOT[iso]) : LAND;
+    hctx.fill();
+  });
+  hctx.beginPath(); heroPath({ type: "Sphere" }); hctx.strokeStyle = "rgba(40,80,110,0.35)"; hctx.lineWidth = 1; hctx.stroke();
+  requestAnimationFrame(heroFrame);
+}
+function startHero() { if (heroOn) return; heroOn = true; requestAnimationFrame(heroFrame); }
+function stopHero() { heroOn = false; }
+
+// ================= BOOT =================
+renderLanding();
+startHero();
+</script>
+</body>
+</html>
